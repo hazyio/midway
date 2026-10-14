@@ -1,0 +1,13 @@
+[package]
+name = "midway-cli"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+clap = { version = "4.6.7", features = ["derive"] }
+tracing = "0.1.44"
+tracing-subscriber = { version = "0.3.23", features = ["env-filter"] }
+rustyline = "18.0.1"
+whoami = "2.1.3"
+
+
