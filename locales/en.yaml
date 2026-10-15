@@ -1,0 +1,2 @@
+errors:
+  config_exists: "You already have a config in here, are you sure you want to overwrite it?"

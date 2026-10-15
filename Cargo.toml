@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["crates/cli"]
+members = ["crates/cli", "crates/config", "crates/logging", "crates/notifier"]
 
 [profile.dev]
 debug = 1
@@ -11,6 +11,7 @@ lto = true
 codegen-units = 1
 strip = true
 panic = "abort"
+
 
 [workspace.lints.clippy]
 todo = "deny"
