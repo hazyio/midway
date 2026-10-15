@@ -3,7 +3,7 @@ extern crate rust_i18n;
 use clap::Parser;
 pub mod cli;
 pub mod handlers;
-i18n!("../../../locales", fallback = "en");
+i18n!("../../locales", fallback = "en");
 
 use crate::{
     cli::{
