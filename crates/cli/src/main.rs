@@ -1,16 +1,14 @@
 #[macro_use]
 extern crate rust_i18n;
 use clap::Parser;
-pub mod cli;
 pub mod handlers;
 i18n!("../../locales", fallback = "en");
 
-use crate::{
-    cli::{
-        init::init,
-        prelude::{Cli, CliCommands},
-    },
-    handlers::{open::prelude::run_open, run::prelude::run_args},
+use crate::handlers::{
+    init::prelude,
+    open::prelude::run_open,
+    prelude::{Cli, CliCommands},
+    run::prelude::run_args,
 };
 
 fn main() {
@@ -18,7 +16,7 @@ fn main() {
     let cli = Cli::parse();
     if cli.command == CliCommands::Init {
         // Handle the Init command immediately before any other processing.
-        init();
+        prelude::init();
         return;
     }
     let config_path = cli.config_path();

@@ -7,7 +7,13 @@ use serde::Deserialize;
 pub struct AppConfig {
     pub tokens: TokenConfig,
 }
-
+impl Default for AppConfig {
+    fn default() -> Self {
+        Self {
+            tokens: TokenConfig::default(),
+        }
+    }
+}
 impl AppConfig {
     pub fn read_from(path: &Path) -> Self {
         match fs::read_to_string(path) {
@@ -20,5 +26,11 @@ impl AppConfig {
     }
     fn from_yaml(yaml: &str) -> Result<Self, noyalib::Error> {
         noyalib::from_str(yaml)
+    }
+    fn validate(&self) -> Result<(), String> {
+        if self.tokens.slack.is_empty() {
+            return Err("Slack webhook URL cannot be empty".into());
+        }
+        Ok(())
     }
 }

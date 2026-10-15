@@ -2,6 +2,7 @@
 resolver = "2"
 members = ["crates/cli", "crates/config", "crates/logging", "crates/notifier"]
 
+
 [profile.dev]
 debug = 1
 

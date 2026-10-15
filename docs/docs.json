@@ -10,11 +10,35 @@
   "favicon": "/favicon.svg",
   "navigation": {
     "pages": [
+      "index",
       {
-        "group": "Getting Started",
+        "group": "Guides",
         "pages": [
-          "index",
-          "quickstart"
+          {
+            "expanded": false,
+            "group": "Installation",
+            "pages": [
+              "installation/index",
+              "installation/cargo",
+              "installation/release-binary",
+              "installation/shell-script",
+              "installation/windows"
+            ]
+          },
+          {
+            "expanded": false,
+            "group": "Commands",
+            "pages": [
+              "commands/init"
+            ]
+          },
+          {
+            "expanded": false,
+            "group": "Notifications",
+            "pages": [
+              "notifications/slack"
+            ]
+          }
         ]
       }
     ]

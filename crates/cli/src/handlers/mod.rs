@@ -1,3 +1,5 @@
+pub mod init;
 pub mod open;
-pub mod run;
 mod prompt;
+pub mod run;
+pub mod prelude;
