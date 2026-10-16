@@ -1,6 +1,6 @@
 use std::process::exit;
 
-use config::{app_config::AppConfig, verifier};
+use config::{app_config::AppConfig, token_config::TelegramToken, verifier};
 
 use crate::handlers::prompt::{prompt_optional, prompt_yes_no, warning_theme};
 
@@ -56,20 +56,24 @@ fn collect_discord() -> Option<String> {
     )
 }
 
-fn collect_telegram() -> Option<String> {
+fn collect_telegram() -> Option<TelegramToken> {
     let token = prompt_optional(
-        "What is your Telegram bot token? See https://midway.hazyio.com/notifications/telegram",
+        "Paste Telegram bot token: See https://midway.hazyio.com/notifications/telegram",
         None,
         Some(|s: &String| verifier::telegram_token(s)),
     );
+
     match token {
         Some(token) => {
-            let user_id = prompt_optional(
-                "What is your Telegram user ID? See https://midway.hazyio.com/notifications/telegram",
+            let chat_id = prompt_optional(
+                "Paste Telegram chat ID: See https://midway.hazyio.com/notifications/telegram",
                 None,
-                Some(|s: &String| verifier::telegram_user_id(s)),
+                Some(|s: &String| verifier::telegram_chat_id(s)),
             );
-            None
+            Some(TelegramToken {
+                token,
+                chat_id: chat_id.unwrap().parse::<u64>().unwrap(),
+            })
         }
         _ => None,
     }

@@ -59,15 +59,39 @@ pub fn discord_webhook(value: &str) -> Result<(), String> {
 
     Ok(())
 }
+pub fn telegram_token(value: &str) -> Result<(), String> {
+    if value.is_empty() {
+        return Ok(());
+    }
+
+    let parts: Vec<_> = value.split(':').collect();
+    if parts.len() != 2 || parts.iter().any(|part| part.is_empty()) {
+        return Err("Enter a valid Telegram bot token.".to_owned());
+    }
+
+    Ok(())
+}
+pub fn telegram_chat_id(value: &str) -> Result<(), String> {
+    if value.is_empty() {
+        return Ok(());
+    }
+
+    if value.parse::<u64>().is_err() {
+        return Err("Enter a valid Telegram chat ID.".to_owned());
+    }
+
+    Ok(())
+}
 
 #[cfg(test)]
 mod tests {
-    use super::{discord_webhook, slack_webhook};
+    use super::{discord_webhook, slack_webhook, telegram_token};
 
     #[test]
     fn accepts_optional_empty_value() {
         assert!(slack_webhook("").is_ok());
         assert!(discord_webhook("").is_ok());
+        assert!(telegram_token("").is_ok());
     }
 
     #[test]
@@ -103,5 +127,16 @@ mod tests {
             discord_webhook("https://discord.com/api/webhooks/123456789012345678/secret?query")
                 .is_err()
         );
+    }
+    #[test]
+    fn accepts_telegram_tokens() {
+        assert!(telegram_token("123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11").is_ok());
+    }
+
+    #[test]
+    fn rejects_malformed_telegram_tokens() {
+        assert!(telegram_token("123456").is_err());
+        assert!(telegram_token("123456:").is_err());
+        assert!(telegram_token(":ABC-DEF1234ghIkl-zyx57W2v1u123ew11").is_err());
     }
 }

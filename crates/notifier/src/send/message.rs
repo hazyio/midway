@@ -47,8 +47,44 @@ impl Message {
     pub fn text(&self) -> String {
         format!("*{}*\n{}", self.title, self.body)
     }
+
+    pub fn telegram_html(&self) -> String {
+        format!(
+            "<b>{}</b>\n{}",
+            html_escape(&self.title),
+            telegram_body(&self.body),
+        )
+    }
 }
 
+fn telegram_body(body: &str) -> String {
+    let mut output = String::new();
+    let mut remaining = body;
+
+    while let Some(open) = remaining.find('`') {
+        output.push_str(&html_escape(&remaining[..open]));
+        let after_open = &remaining[open + 1..];
+
+        if let Some(close) = after_open.find('`') {
+            output.push_str("<code>");
+            output.push_str(&html_escape(&after_open[..close]));
+            output.push_str("</code>");
+            remaining = &after_open[close + 1..];
+        } else {
+            output.push_str(&html_escape(&remaining[open..]));
+            return output;
+        }
+    }
+
+    output.push_str(&html_escape(remaining));
+    output
+}
+
+fn html_escape(s: &str) -> String {
+    s.replace('&', "&amp;")
+        .replace('<', "&lt;")
+        .replace('>', "&gt;")
+}
 fn describe_signal(status: &ExitStatus, cmd: &str, took: &str) -> (String, String) {
     #[cfg(unix)]
     if let Some(sig) = status.signal() {
@@ -104,5 +140,27 @@ fn exit_hint(code: i32) -> Option<&'static str> {
         127 => Some("command not found"),
         130 => Some("interrupted (Ctrl+C)"),
         _ => None,
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::Message;
+
+    #[test]
+    fn telegram_html_formats_and_escapes_body() {
+        let message = Message::from_text("Run `ls & pwd` <tag>");
+
+        assert_eq!(
+            message.telegram_html(),
+            "<b>Notification</b>\nRun <code>ls &amp; pwd</code> &lt;tag&gt;"
+        );
+    }
+
+    #[test]
+    fn telegram_html_keeps_unmatched_backtick_literal() {
+        let message = Message::from_text("Run `ls");
+
+        assert_eq!(message.telegram_html(), "<b>Notification</b>\nRun `ls");
     }
 }

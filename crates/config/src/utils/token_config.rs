@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 pub struct TokenConfig {
     pub slack: Option<String>,
     pub discord: Option<String>,
-    pub telegram: Option<String>,
+    pub telegram: Option<TelegramToken>,
 }
 
 impl Default for TokenConfig {
@@ -16,4 +16,9 @@ impl Default for TokenConfig {
         }
     }
 }
- 
+#[derive(Deserialize, Serialize)]
+
+pub struct TelegramToken {
+    pub token: String,
+    pub chat_id: u64,
+}

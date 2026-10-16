@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 pub enum SendFrom {
     Slack,
     Discord,
+    Telegram,
 }
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub enum PickFrom {

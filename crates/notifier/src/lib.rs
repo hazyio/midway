@@ -52,6 +52,13 @@ fn send(config: Arc<config::app_config::AppConfig>, message: &Message) {
                     tracing::warn!("No Discord webhook URL configured");
                 }
             }
+            config::notification::SendFrom::Telegram => {
+                if let Some(telegram) = &config.tokens.telegram {
+                    crate::send::telegram::send_telegram_notification(&message, telegram);
+                } else {
+                    tracing::warn!("No Telegram token configured");
+                }
+            }
         }
     }
 }

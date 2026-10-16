@@ -1,0 +1,35 @@
+---
+title: "Telegram notifications"
+description: "Connect Midway to a Telegram chat with a bot"
+---
+
+## Create a Telegram bot
+
+1. Open [BotFather](https://telegram.me/BotFather) in Telegram and send `/newbot`.
+2. Follow the instructions to name your bot and choose its username.
+3. Copy the bot token that BotFather provides. Keep it private; anyone with the token can control your bot.
+
+## Find your chat ID
+
+1. Open your new bot in Telegram and send `/start`.
+2. Open `https://api.telegram.org/bot<TOKEN>/getUpdates`, replacing `<TOKEN>` with your bot token.
+3. In the response, copy the value of `result[0].message.chat.id`.
+
+If `result` is empty, send another message to your bot and reload the URL.
+
+## Add Telegram to Midway
+
+Run the Midway setup command and paste the bot token and chat ID when prompted:
+
+```bash
+midway init
+```
+
+You can also add them directly to `midway.yaml` under `tokens.telegram`:
+
+```yaml
+tokens:
+	telegram:
+		token: "BOT_TOKEN"
+		chat_id: 123456789
+```

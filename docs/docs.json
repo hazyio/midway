@@ -44,7 +44,8 @@
             "group": "Notifications",
             "pages": [
               "notifications/slack",
-              "notifications/discord"
+              "notifications/discord",
+              "notifications/telegram"
             ]
           }
         ]
