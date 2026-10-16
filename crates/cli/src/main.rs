@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use clap::Parser;
 pub mod handlers;
 
@@ -17,17 +19,17 @@ fn main() {
         return;
     }
     let config_path = cli.config_path();
-    let app_config = config::app_config::AppConfig::read_from(&config_path);
+    let app_config = Arc::new(config::app_config::AppConfig::read_from(&config_path));
     match cli.command {
         CliCommands::Run(args) => {
             if args.rest.is_empty() {
                 tracing::error!("No arguments passed.");
             } else {
-                run_args(args.rest, &app_config);
+                run_args(args.rest, app_config.clone());
             }
         }
         CliCommands::Open => {
-            let _ = run_open(&app_config);
+            let _ = run_open(app_config.clone());
         }
         CliCommands::Init => {
             panic!("Init command should have been handled earlier.");

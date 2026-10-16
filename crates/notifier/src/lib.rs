@@ -1,4 +1,4 @@
-use std::io;
+use std::{io, sync::Arc, time::Duration};
 
 use crate::send::message::Message;
 
@@ -6,7 +6,8 @@ mod send;
 pub fn send_status(
     command: &str,
     status: io::Result<std::process::ExitStatus>,
-    config: &config::app_config::AppConfig,
+    elapsed: Duration,
+    config: Arc<config::app_config::AppConfig>,
 ) {
     let send_from = &config.notification.send_from;
     if send_from.is_empty() {
@@ -20,27 +21,7 @@ pub fn send_status(
         config::notification::PickFrom::All => pick_all(send_from),
         config::notification::PickFrom::Any(n) => pick_any(send_from, n),
     };
-    let message = match status {
-        Ok(status) => match status.code() {
-            Some(code) => Message::new(
-                "Command exited",
-                format!("The command exited with code: {}", code).as_str(),
-                command,
-            ),
-            None => Message::new(
-                "Command terminated",
-                "The command was terminated by a signal"
-                    .to_string()
-                    .as_str(),
-                command,
-            ),
-        },
-        Err(e) => Message::new(
-            "Command failed",
-            format!("Error occurred: {}", e).as_str(),
-            command,
-        ),
-    };
+    let message = Message::from_status(&status, command, elapsed);
     for method in send_methods {
         match method {
             config::notification::SendFrom::Slack => {

@@ -701,6 +701,7 @@ dependencies = [
  "config",
  "rand",
  "serde",
+ "serde_json",
  "tracing",
  "ureq",
 ]

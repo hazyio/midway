@@ -1,17 +1,20 @@
 use config::app_config::AppConfig;
 use rustyline::DefaultEditor;
-use std::{path::PathBuf, process::Command};
+use std::sync::Arc;
+use std::{path::PathBuf, process::Command, time::Duration};
 
+use crate::handlers::job::Job;
 use crate::handlers::prompt::Prompt;
 
 use super::builtin;
-pub fn run_open(config: &AppConfig) -> rustyline::Result<()> {
+pub fn run_open(config: Arc<AppConfig>) -> rustyline::Result<()> {
     let mut rl = DefaultEditor::new()?;
     let prompt = Prompt::new();
     let mut oldpwd: Option<PathBuf> = None;
     tracing::info!(
-        "Interactive shell opened, use ctrl+d to exit use midway to confirm if you are in the midway environment"
+        "Interactive shell opened, use ctrl+d to exit; use midway to confirm if you are in the midway environment"
     );
+    let mut background_job = Job::create();
 
     loop {
         let cwd = std::env::current_dir().unwrap_or_default();
@@ -57,11 +60,18 @@ pub fn run_open(config: &AppConfig) -> rustyline::Result<()> {
         command.arg("-c");
         let start_time = std::time::Instant::now();
         let status = command.arg(line).env("MIDWAY_SHELL", "1").status();
-        let duration_in_seconds = start_time.elapsed().as_secs_f64();
-        if duration_in_seconds > config.notify_after.minimum_send_after as f64 {
-            notifier::send_status(&format!("{} {}", cmd, arg), status, config);
+        let elapsed = start_time.elapsed();
+
+        let limit = Duration::from_secs(config.notify_after.minimum_send_after);
+        if elapsed >= limit {
+            let command = format!("{} {}", cmd, arg);
+            let config = config.clone();
+            background_job.new_job(move || {
+                notifier::send_status(&command, status, elapsed, config);
+            });
         }
     }
+    background_job.wait_all();
     Ok(())
 }
 
