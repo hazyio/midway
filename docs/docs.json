@@ -45,7 +45,9 @@
             "pages": [
               "notifications/slack",
               "notifications/discord",
-              "notifications/telegram"
+              "notifications/telegram",
+              "notifications/ntfy",
+              "notifications/local"
             ]
           }
         ]

@@ -1,0 +1,31 @@
+---
+title: "Ntfy notifications"
+description: "Connect Midway to ntfy with a server URL and topic"
+---
+
+## Set up ntfy
+
+1. Install [ntfy from Google Play](https://play.google.com/store/apps/details?id=io.heckel.ntfy).
+2. In the app, add a topic and choose a topic name.
+3. Subscribe to that topic.
+4. Open the three-dot menu in the top-right corner and select **Subscription settings**.
+5. Scroll to **About** and copy the server URL.
+
+Topics are public unless your server requires authentication. Choose a hard-to-guess topic name and keep it private. Topic names can be up to 64 characters and contain only letters, numbers, underscores, and dashes.
+
+## Add ntfy to Midway
+
+Run the Midway setup command. Paste the server URL copied from **About**, then enter the topic name you created:
+
+```bash
+midway init
+```
+
+You can also add the values directly to `midway.yaml` under `tokens.ntfy`:
+
+```yaml
+tokens:
+	ntfy:
+		server_url: "https://ntfy.sh"
+		topic: "YOUR_PRIVATE_TOPIC"
+```

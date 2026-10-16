@@ -59,6 +59,42 @@ pub fn discord_webhook(value: &str) -> Result<(), String> {
 
     Ok(())
 }
+
+pub fn ntfy_server_url(value: &str) -> Result<(), String> {
+    if value.is_empty() {
+        return Ok(());
+    }
+
+    let url = url::Url::parse(value).map_err(|_| "Enter a valid Ntfy server URL.".to_owned())?;
+    if url.scheme() != "https" {
+        return Err("Ntfy server URLs must use HTTPS.".to_owned());
+    }
+    if url.host_str().is_none() || !url.username().is_empty() || url.password().is_some() {
+        return Err("Enter a valid Ntfy server URL.".to_owned());
+    }
+    if url.query().is_some() || url.fragment().is_some() {
+        return Err("Enter a valid Ntfy server URL.".to_owned());
+    }
+
+    Ok(())
+}
+
+pub fn ntfy_topic(value: &str) -> Result<(), String> {
+    if value.is_empty()
+        || value.len() > 64
+        || !value
+            .bytes()
+            .all(|byte| byte.is_ascii_alphanumeric() || byte == b'_' || byte == b'-')
+    {
+        return Err(
+            "Ntfy topics must be 1-64 characters and contain only letters, numbers, underscores, or dashes."
+                .to_owned(),
+        );
+    }
+
+    Ok(())
+}
+
 pub fn telegram_token(value: &str) -> Result<(), String> {
     if value.is_empty() {
         return Ok(());
@@ -85,13 +121,14 @@ pub fn telegram_chat_id(value: &str) -> Result<(), String> {
 
 #[cfg(test)]
 mod tests {
-    use super::{discord_webhook, slack_webhook, telegram_token};
+    use super::{discord_webhook, ntfy_server_url, ntfy_topic, slack_webhook, telegram_token};
 
     #[test]
     fn accepts_optional_empty_value() {
         assert!(slack_webhook("").is_ok());
         assert!(discord_webhook("").is_ok());
         assert!(telegram_token("").is_ok());
+        assert!(ntfy_server_url("").is_ok());
     }
 
     #[test]
@@ -128,6 +165,36 @@ mod tests {
                 .is_err()
         );
     }
+
+    #[test]
+    fn accepts_ntfy_server_urls() {
+        assert!(ntfy_server_url("https://ntfy.sh").is_ok());
+        assert!(ntfy_server_url("https://ntfy.example.com/notifications").is_ok());
+    }
+
+    #[test]
+    fn rejects_non_https_or_malformed_ntfy_urls() {
+        assert!(ntfy_server_url("http://ntfy.sh").is_err());
+        assert!(ntfy_server_url("https://").is_err());
+        assert!(ntfy_server_url("https://user@ntfy.sh").is_err());
+        assert!(ntfy_server_url("https://ntfy.sh?topic=test").is_err());
+    }
+
+    #[test]
+    fn accepts_ntfy_topics() {
+        assert!(ntfy_topic("midway-alerts_1").is_ok());
+        assert!(ntfy_topic(&"a".repeat(64)).is_ok());
+    }
+
+    #[test]
+    fn rejects_empty_or_invalid_ntfy_topics() {
+        assert!(ntfy_topic("").is_err());
+        assert!(ntfy_topic(&"a".repeat(65)).is_err());
+        assert!(ntfy_topic("topic name").is_err());
+        assert!(ntfy_topic("topic/name").is_err());
+        assert!(ntfy_topic("topic.name").is_err());
+    }
+
     #[test]
     fn accepts_telegram_tokens() {
         assert!(telegram_token("123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11").is_ok());

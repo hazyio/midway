@@ -6,6 +6,7 @@ edition = "2024"
 [dependencies]
 noyalib = { version = "0.0.57" }
 serde = { version = "1.0.229", features = ["derive"] }
+url = "2"
 
 [lints]
 workspace = true

@@ -5,6 +5,8 @@ pub struct TokenConfig {
     pub slack: Option<String>,
     pub discord: Option<String>,
     pub telegram: Option<TelegramToken>,
+    pub ntfy: Option<NtfyConfig>,
+
 }
 
 impl Default for TokenConfig {
@@ -13,6 +15,7 @@ impl Default for TokenConfig {
             slack: None,
             discord: None,
             telegram: None,
+            ntfy: None,
         }
     }
 }
@@ -21,4 +24,11 @@ impl Default for TokenConfig {
 pub struct TelegramToken {
     pub token: String,
     pub chat_id: u64,
+}
+
+
+#[derive(Deserialize, Serialize)]
+pub struct NtfyConfig {
+    pub server_url: String,
+    pub topic: String,
 }

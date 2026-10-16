@@ -48,6 +48,14 @@ impl AppConfig {
         if let Some(discord) = &self.tokens.discord {
             verifier::discord_webhook(discord)?;
         }
+        if let Some(ntfy) = &self.tokens.ntfy {
+            verifier::ntfy_server_url(&ntfy.server_url)?;
+            verifier::ntfy_topic(&ntfy.topic)?;
+        }
+        if let Some(telegram) = &self.tokens.telegram {
+            verifier::telegram_token(&telegram.token)?;
+            verifier::telegram_chat_id(&telegram.chat_id.to_string())?;
+        }
         Ok(())
     }
 }

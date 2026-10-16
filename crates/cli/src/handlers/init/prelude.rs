@@ -1,6 +1,10 @@
 use std::process::exit;
 
-use config::{app_config::AppConfig, token_config::TelegramToken, verifier};
+use config::{
+    app_config::AppConfig,
+    token_config::{NtfyConfig, TelegramToken},
+    verifier,
+};
 
 use crate::handlers::prompt::{prompt_optional, prompt_yes_no, warning_theme};
 
@@ -36,6 +40,10 @@ pub fn init() {
     if let Some(telegram) = telegram {
         app.tokens.telegram = Some(telegram);
     }
+    let ntfy = collect_ntfy();
+    if let Some(ntfy) = ntfy {
+        app.tokens.ntfy = Some(ntfy);
+    }
     app.save_to(std::path::Path::new("midway.yaml"))
         .expect("Failed to save config");
 }
@@ -45,6 +53,7 @@ fn collect_slack() -> Option<String> {
         "What is your Slack webhook? See https://midway.hazyio.com/notifications/slack",
         None,
         Some(|s: &String| verifier::slack_webhook(s)),
+        None,
     )
 }
 
@@ -53,6 +62,7 @@ fn collect_discord() -> Option<String> {
         "What is your Discord webhook? See https://midway.hazyio.com/notifications/discord",
         None,
         Some(|s: &String| verifier::discord_webhook(s)),
+        None,
     )
 }
 
@@ -61,6 +71,7 @@ fn collect_telegram() -> Option<TelegramToken> {
         "Paste Telegram bot token: See https://midway.hazyio.com/notifications/telegram",
         None,
         Some(|s: &String| verifier::telegram_token(s)),
+        None,
     );
 
     match token {
@@ -69,12 +80,45 @@ fn collect_telegram() -> Option<TelegramToken> {
                 "Paste Telegram chat ID: See https://midway.hazyio.com/notifications/telegram",
                 None,
                 Some(|s: &String| verifier::telegram_chat_id(s)),
+                None,
             );
-            Some(TelegramToken {
-                token,
-                chat_id: chat_id.unwrap().parse::<u64>().unwrap(),
-            })
+            if let Some(chat_id) = chat_id {
+                Some(TelegramToken {
+                    token,
+                    chat_id: chat_id.parse::<u64>().unwrap(),
+                })
+            } else {
+                None
+            }
         }
         _ => None,
+    }
+}
+
+fn collect_ntfy() -> Option<NtfyConfig> {
+    let server = prompt_optional(
+        "What is your Ntfy server URL? See https://midway.hazyio.com/notifications/ntfy",
+        None,
+        Some(|s: &String| verifier::ntfy_server_url(s)),
+        None,
+    );
+    match server {
+        Some(server) => {
+            let topic = prompt_optional(
+                "What is your Ntfy topic? See https://midway.hazyio.com/notifications/ntfy",
+                None,
+                Some(|s: &String| verifier::ntfy_topic(s)),
+                None,
+            );
+            if let Some(topic) = topic {
+                Some(NtfyConfig {
+                    server_url: server,
+                    topic: topic,
+                })
+            } else {
+                None
+            }
+        }
+        None => None,
     }
 }

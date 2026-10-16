@@ -59,6 +59,16 @@ fn send(config: Arc<config::app_config::AppConfig>, message: &Message) {
                     tracing::warn!("No Telegram token configured");
                 }
             }
+            config::notification::SendFrom::Ntfy => {
+                if let Some(ntfy_url) = &config.tokens.ntfy {
+                    crate::send::ntfy::send_ntfy_notification(&message, ntfy_url);
+                } else {
+                    tracing::warn!("No Ntfy server URL configured");
+                }
+            }
+            config::notification::SendFrom::Local => {
+                crate::send::local::send_local_notification(&message);
+            }
         }
     }
 }

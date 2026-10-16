@@ -5,6 +5,8 @@ pub enum SendFrom {
     Slack,
     Discord,
     Telegram,
+    Ntfy,
+    Local,
 }
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub enum PickFrom {
@@ -23,7 +25,13 @@ pub struct NotificationConfig {
 impl Default for NotificationConfig {
     fn default() -> Self {
         Self {
-            send_from: vec![SendFrom::Slack],
+            send_from: vec![
+                SendFrom::Local,
+                SendFrom::Slack,
+                SendFrom::Ntfy,
+                SendFrom::Discord,
+                SendFrom::Telegram,
+            ],
             pick_from: PickFrom::All,
         }
     }

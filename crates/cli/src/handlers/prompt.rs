@@ -1,4 +1,4 @@
-use std::path::Path;
+use std::{default, path::Path};
 
 use console::Style;
 use dialoguer::{Confirm, Input, theme::ColorfulTheme};
@@ -50,12 +50,14 @@ pub fn prompt_optional(
     prompt: &str,
     theme: Option<ColorfulTheme>,
     validate_with: Option<impl FnMut(&String) -> Result<(), String>>,
+    default: Option<String>,
 ) -> Option<String> {
     let theme = unwrap_theme(theme);
 
     let mut input = Input::<String>::with_theme(&theme)
         .with_prompt(prompt)
-        .allow_empty(true);
+        .allow_empty(true)
+        .default(default.unwrap_or_default());
 
     if let Some(v) = validate_with {
         input = input.validate_with(v);

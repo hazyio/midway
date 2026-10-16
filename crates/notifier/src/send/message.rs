@@ -4,8 +4,8 @@ use std::{io, process::ExitStatus, time::Duration};
 use std::os::unix::process::ExitStatusExt;
 
 pub struct Message {
-    title: String,
-    body: String,
+   pub title: String,
+    pub  body: String,
 }
 
 impl Message {
@@ -15,6 +15,7 @@ impl Message {
             body: text.to_string(),
         }
     }
+    
     pub fn from_status(status: &io::Result<ExitStatus>, cmd: &str, elapsed: Duration) -> Self {
         let took = fmt_duration(elapsed);
 
