@@ -21,6 +21,15 @@ Run the Midway setup command. Paste the server URL copied from **About**, then e
 midway init
 ```
 
+The server URL and topic alone do not enable ntfy delivery. Add `Ntfy` to `notification.send_to` in `midway.yaml`, or Midway will not send notifications through ntfy. With `pick_from: All`, Midway sends through every method listed there:
+
+```yaml
+notification:
+	send_to:
+		- Ntfy
+	pick_from: All
+```
+
 You can also add the values directly to `midway.yaml` under `tokens.ntfy`:
 
 ```yaml

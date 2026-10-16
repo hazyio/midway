@@ -7,15 +7,15 @@ Midway can show notifications through your operating system's desktop notificati
 
 ## Enable local notifications
 
-Add `Local` to `notification.send_from` in `midway.yaml`:
+Add `Local` to `notification.send_to` in `midway.yaml`; otherwise, Midway will not send local notifications:
 
 ```yaml
 notification:
-	send_from:
+	send_to:
 		- Local
 	pick_from: All
 ```
 
-If you already have other notification methods in `send_from`, keep them and add `Local` to the list.
+If you already have other notification methods in `send_to`, keep them and add `Local` to the list.
 
 Local notifications require a desktop session with system notifications enabled. They may not appear when Midway runs in a headless environment.

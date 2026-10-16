@@ -26,6 +26,15 @@ Run the Midway setup command and paste the webhook URL when prompted:
 midway init
 ```
 
+The webhook alone does not enable Slack delivery. Add `Slack` to `notification.send_to` in `midway.yaml`, or Midway will not send notifications through Slack. With `pick_from: All`, Midway sends through every method listed there:
+
+```yaml
+notification:
+  send_to:
+    - Slack
+  pick_from: All
+```
+
 The current setup prompt accepts one webhook URL per configuration. Creating additional Slack webhooks does not add more Midway prompts; use a separate configuration for another channel.
 
 You can also add the webhook URL directly to `midway.yaml` under `tokens.slack`:

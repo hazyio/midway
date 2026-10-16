@@ -25,6 +25,15 @@ Run the Midway setup command and paste the bot token and chat ID when prompted:
 midway init
 ```
 
+The bot token and chat ID alone do not enable Telegram delivery. Add `Telegram` to `notification.send_to` in `midway.yaml`, or Midway will not send notifications through Telegram. With `pick_from: All`, Midway sends through every method listed there:
+
+```yaml
+notification:
+	send_to:
+		- Telegram
+	pick_from: All
+```
+
 You can also add them directly to `midway.yaml` under `tokens.telegram`:
 
 ```yaml

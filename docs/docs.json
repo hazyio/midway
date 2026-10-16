@@ -43,11 +43,11 @@
             "expanded": false,
             "group": "Notifications",
             "pages": [
+              "notifications/local",
               "notifications/slack",
-              "notifications/discord",
-              "notifications/telegram",
               "notifications/ntfy",
-              "notifications/local"
+              "notifications/discord",
+              "notifications/telegram"
             ]
           }
         ]
