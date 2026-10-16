@@ -31,6 +31,9 @@ fn main() {
         CliCommands::Open => {
             let _ = run_open(app_config.clone());
         }
+        CliCommands::SendText(args) => {
+            notifier::send_text(&args.message, app_config.clone());
+        }
         CliCommands::Init => {
             panic!("Init command should have been handled earlier.");
         }

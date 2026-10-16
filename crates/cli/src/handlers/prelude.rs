@@ -6,12 +6,18 @@ pub struct RunArgs {
     #[arg(trailing_var_arg = true, allow_hyphen_values = true, required = true)]
     pub rest: Vec<String>,
 }
+#[derive(Args, PartialEq, Eq)]
+pub struct SendTextArgs {
+    /// Text to send, e.g. `midway send-text -m "deploy finished"`
+    #[arg(short, long)]
+    pub message: String,
+}
 #[derive(Subcommand, PartialEq, Eq)]
 pub enum CliCommands {
     Run(RunArgs),
     Open,
     Init,
-    SendText,
+    SendText(SendTextArgs),
 }
 
 #[derive(Parser)]
