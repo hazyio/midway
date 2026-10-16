@@ -14,3 +14,4 @@ console = "0.16.6"
 
 config = { path = "../config" }
 logging = { path = "../logging" }
+notifier = { path = "../notifier" }

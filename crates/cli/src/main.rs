@@ -1,8 +1,5 @@
-#[macro_use]
-extern crate rust_i18n;
 use clap::Parser;
 pub mod handlers;
-i18n!("../../locales", fallback = "en");
 
 use crate::handlers::{
     init::prelude,
@@ -26,11 +23,11 @@ fn main() {
             if args.rest.is_empty() {
                 tracing::error!("No arguments passed.");
             } else {
-                run_args(args.rest);
+                run_args(args.rest, &app_config);
             }
         }
         CliCommands::Open => {
-            let _ = run_open();
+            let _ = run_open(&app_config);
         }
         CliCommands::Init => {
             panic!("Init command should have been handled earlier.");

@@ -1,10 +1,11 @@
+use config::app_config::AppConfig;
 use rustyline::DefaultEditor;
 use std::{path::PathBuf, process::Command};
 
 use crate::handlers::prompt::Prompt;
 
 use super::builtin;
-pub fn run_open() -> rustyline::Result<()> {
+pub fn run_open(config: &AppConfig) -> rustyline::Result<()> {
     let mut rl = DefaultEditor::new()?;
     let prompt = Prompt::new();
     let mut oldpwd: Option<PathBuf> = None;
@@ -54,14 +55,18 @@ pub fn run_open() -> rustyline::Result<()> {
         command.arg("/C");
         #[cfg(not(windows))]
         command.arg("-c");
-        let _ = command.arg(line).env("MIDWAY_SHELL", "1").status();
+        let start_time = std::time::Instant::now();
+        let status = command.arg(line).env("MIDWAY_SHELL", "1").status();
+        let duration_in_seconds = start_time.elapsed().as_secs_f64();
+        if duration_in_seconds > config.notify_after.minimum_send_after as f64 {
+            notifier::send_status(status, config);
+        }
     }
     Ok(())
 }
 
 fn allow(cmd: &str) -> Option<&str> {
     if cmd.contains("rm -rf /") {
-        // your hook: log, rewrite, block, audit...
         return Some("rm -rf / is blocked");
     }
     None

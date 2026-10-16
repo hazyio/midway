@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "palm",
-  "name": "docs",
+  "theme": "mint",
+  "name": "Midway Docs",
   "colors": {
     "primary": "#16A34A",
     "light": "#07C983",
@@ -10,10 +10,10 @@
   "favicon": "/favicon.svg",
   "navigation": {
     "pages": [
-      "index",
       {
-        "group": "Guides",
+        "group": "Getting Started",
         "pages": [
+          "index",
           {
             "expanded": false,
             "group": "Installation",
@@ -25,11 +25,18 @@
               "installation/windows"
             ]
           },
+          "config"
+        ]
+      },
+      {
+        "group": "Guides",
+        "pages": [
           {
             "expanded": false,
             "group": "Commands",
             "pages": [
-              "commands/init"
+              "commands/init",
+              "commands/open"
             ]
           },
           {
@@ -51,8 +58,10 @@
     "primary": {
       "type": "github",
       "label": "Github",
-      "href": "https://github.com/hazyio"
+      "href": "https://github.com/hazyio/midway"
+
     }
+
   },
   "contextual": {
     "options": [

@@ -34,5 +34,5 @@ impl Cli {
 fn default_config() -> PathBuf {
     let path = env::current_dir().expect("Failed to read working directory.");
 
-    PathBuf::from(path).join("midway.toml")
+    PathBuf::from(path).join("midway.yaml")
 }

@@ -1,21 +1,21 @@
-pub(super) fn slack_webhook(value: &str) -> Result<(), &'static str> {
+pub fn slack_webhook(value: &str) -> Result<(), String> {
     if value.is_empty() {
         return Ok(());
     }
 
     let Some(rest) = value.strip_prefix("https://") else {
-        return Err("Slack webhook URLs must use HTTPS.");
+        return Err("Slack webhook URLs must use HTTPS.".to_owned());
     };
     let Some((host, path)) = rest.split_once('/') else {
-        return Err("Enter a valid Slack incoming webhook URL.");
+        return Err("Enter a valid Slack incoming webhook URL.".to_owned());
     };
 
     if host != "hooks.slack.com" && host != "hooks.slack-gov.com" {
-        return Err("URL must be a Slack incoming webhook URL.");
+        return Err("URL must be a Slack incoming webhook URL.".to_owned());
     }
 
     let Some(path) = path.strip_prefix("services/") else {
-        return Err("Enter a valid Slack incoming webhook URL.");
+        return Err("Enter a valid Slack incoming webhook URL.".to_owned());
     };
     let parts: Vec<_> = path.split('/').collect();
     if parts.len() != 3
@@ -23,7 +23,7 @@ pub(super) fn slack_webhook(value: &str) -> Result<(), &'static str> {
             .iter()
             .any(|part| part.is_empty() || part.contains(['?', '#']))
     {
-        return Err("Enter a valid Slack incoming webhook URL.");
+        return Err("Enter a valid Slack incoming webhook URL.".to_owned());
     }
 
     Ok(())
