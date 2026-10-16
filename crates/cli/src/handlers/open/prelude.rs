@@ -59,7 +59,7 @@ pub fn run_open(config: &AppConfig) -> rustyline::Result<()> {
         let status = command.arg(line).env("MIDWAY_SHELL", "1").status();
         let duration_in_seconds = start_time.elapsed().as_secs_f64();
         if duration_in_seconds > config.notify_after.minimum_send_after as f64 {
-            notifier::send_status(status, config);
+            notifier::send_status(&format!("{} {}", cmd, arg), status, config);
         }
     }
     Ok(())

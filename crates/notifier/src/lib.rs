@@ -1,7 +1,10 @@
 use std::io;
 
+use crate::send::message::Message;
+
 mod send;
 pub fn send_status(
+    command: &str,
     status: io::Result<std::process::ExitStatus>,
     config: &config::app_config::AppConfig,
 ) {
@@ -10,21 +13,76 @@ pub fn send_status(
         tracing::warn!("No send_from addresses configured");
         return;
     }
-    let amount = match config.notification.pick_from {
-        config::notification::PickFrom::Random => 1,
-        config::notification::PickFrom::Half => send_from.len().div_ceil(2),
-        config::notification::PickFrom::OneThird => send_from.len().div_ceil(3),
-        config::notification::PickFrom::All => send_from.len(),
-        config::notification::PickFrom::Any(n) => n,
+    let send_methods = match config.notification.pick_from {
+        config::notification::PickFrom::Random => vec![pick_random(send_from)],
+        config::notification::PickFrom::Half => pick_half(send_from),
+        config::notification::PickFrom::OneThird => pick_one_third(send_from),
+        config::notification::PickFrom::All => pick_all(send_from),
+        config::notification::PickFrom::Any(n) => pick_any(send_from, n),
     };
-    let send_methods = pick_random(send_from, amount);
+    let message = match status {
+        Ok(status) => match status.code() {
+            Some(code) => Message::new(
+                "Command exited",
+                format!("The command exited with code: {}", code).as_str(),
+                command,
+            ),
+            None => Message::new(
+                "Command terminated",
+                "The command was terminated by a signal"
+                    .to_string()
+                    .as_str(),
+                command,
+            ),
+        },
+        Err(e) => Message::new(
+            "Command failed",
+            format!("Error occurred: {}", e).as_str(),
+            command,
+        ),
+    };
     for method in send_methods {
-        // send the notification using the selected method
+        match method {
+            config::notification::SendFrom::Slack => {
+                if let Some(webhook_url) = &config.tokens.slack {
+                    crate::send::slack::send_slack_notification(&message, webhook_url);
+                } else {
+                    tracing::warn!("No Slack webhook URL configured");
+                }
+            }
+        }
     }
 }
 
-// Amounts above methods.len() are clamped by `sample`.
-fn pick_random<T>(methods: &[T], amount: usize) -> Vec<&T> {
+fn pick_random<T>(methods: &[T]) -> &T {
+    use rand::seq::IndexedRandom;
+    methods
+        .choose(&mut rand::rng())
+        .expect("methods should not be empty")
+}
+
+fn pick_half<T>(methods: &[T]) -> Vec<&T> {
+    pick_any(methods, methods.len().div_ceil(2))
+}
+
+fn pick_one_third<T>(methods: &[T]) -> Vec<&T> {
+    pick_any(methods, methods.len().div_ceil(3))
+}
+
+fn pick_all<T>(methods: &[T]) -> Vec<&T> {
+    methods.iter().collect()
+}
+
+// `sample` clamps amounts above methods.len().
+fn pick_any<T>(methods: &[T], amount: usize) -> Vec<&T> {
+    if methods.len() <= amount {
+        tracing::warn!(
+            "Requested amount {} exceeds available methods {}",
+            amount,
+            methods.len()
+        );
+        return pick_all(methods);
+    }
     use rand::seq::IndexedRandom;
     methods.sample(&mut rand::rng(), amount).collect()
 }

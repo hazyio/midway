@@ -6,6 +6,8 @@ edition = "2024"
 [dependencies]
 rand = "0.10.3"
 tracing = "0.1.44"
+serde = "1.0.229"
+ureq = { version = "3.4.2", features = ["json"] }
 
 config = { path = "../config" }
 
