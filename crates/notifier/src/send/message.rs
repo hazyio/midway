@@ -9,6 +9,12 @@ pub struct Message {
 }
 
 impl Message {
+    pub fn from_text(text: &str) -> Self {
+        Self {
+            title: "Notification".to_string(),
+            body: text.to_string(),
+        }
+    }
     pub fn from_status(status: &io::Result<ExitStatus>, cmd: &str, elapsed: Duration) -> Self {
         let took = fmt_duration(elapsed);
 

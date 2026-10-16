@@ -11,6 +11,7 @@ pub enum CliCommands {
     Run(RunArgs),
     Open,
     Init,
+    SendText,
 }
 
 #[derive(Parser)]

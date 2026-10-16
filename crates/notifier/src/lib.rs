@@ -14,6 +14,21 @@ pub fn send_status(
         tracing::warn!("No send_from addresses configured");
         return;
     }
+    let message = Message::from_status(&status, command, elapsed);
+    send(config.clone(), &message);
+}
+pub fn send_text(message: &str, config: Arc<config::app_config::AppConfig>) {
+    let send_from = &config.notification.send_from;
+    if send_from.is_empty() {
+        tracing::warn!("No send_from addresses configured");
+        return;
+    }
+    let message = Message::from_text(message);
+    send(config.clone(), &message);
+}
+fn send(config: Arc<config::app_config::AppConfig>, message: &Message) {
+    let send_from = &config.notification.send_from;
+
     let send_methods = match config.notification.pick_from {
         config::notification::PickFrom::Random => vec![pick_random(send_from)],
         config::notification::PickFrom::Half => pick_half(send_from),
@@ -21,7 +36,6 @@ pub fn send_status(
         config::notification::PickFrom::All => pick_all(send_from),
         config::notification::PickFrom::Any(n) => pick_any(send_from, n),
     };
-    let message = Message::from_status(&status, command, elapsed);
     for method in send_methods {
         match method {
             config::notification::SendFrom::Slack => {
