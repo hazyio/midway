@@ -1,10 +1,7 @@
 use std::path::Path;
 
 use console::Style;
-use dialoguer::{
-    Confirm, Input,
-    theme::{self, ColorfulTheme},
-};
+use dialoguer::{Confirm, Input, theme::ColorfulTheme};
 
 pub struct Prompt {
     user: String,

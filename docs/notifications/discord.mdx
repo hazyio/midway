@@ -1,0 +1,27 @@
+---
+title: "Discord notifications"
+description: "Connect Midway to a Discord channel with a webhook"
+---
+
+## Create a Discord webhook
+
+1. Open the channel where Midway should post and go to **Edit Channel**.
+2. Open **Integrations**, select **Webhooks**, then create a webhook for the channel.
+3. Copy the webhook URL.
+
+## Add the webhook to Midway
+
+Run the Midway setup command and paste the webhook URL when prompted:
+
+```bash
+midway init
+```
+
+The current setup prompt accepts one webhook URL per configuration.
+
+You can also add the webhook URL directly to `midway.yaml` under `tokens.discord`:
+
+```yaml
+tokens:
+	discord: "https://discord.com/api/webhooks/WEBHOOK_ID/WEBHOOK_TOKEN"
+```

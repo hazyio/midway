@@ -43,7 +43,8 @@
             "expanded": false,
             "group": "Notifications",
             "pages": [
-              "notifications/slack"
+              "notifications/slack",
+              "notifications/discord"
             ]
           }
         ]
@@ -59,9 +60,7 @@
       "type": "github",
       "label": "Github",
       "href": "https://github.com/hazyio/midway"
-
     }
-
   },
   "contextual": {
     "options": [

@@ -45,6 +45,13 @@ fn send(config: Arc<config::app_config::AppConfig>, message: &Message) {
                     tracing::warn!("No Slack webhook URL configured");
                 }
             }
+            config::notification::SendFrom::Discord => {
+                if let Some(webhook_url) = &config.tokens.discord {
+                    crate::send::discord::send_discord_notification(&message, webhook_url);
+                } else {
+                    tracing::warn!("No Discord webhook URL configured");
+                }
+            }
         }
     }
 }

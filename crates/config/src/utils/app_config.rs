@@ -45,7 +45,9 @@ impl AppConfig {
         if let Some(slack) = &self.tokens.slack {
             verifier::slack_webhook(slack)?;
         }
-
+        if let Some(discord) = &self.tokens.discord {
+            verifier::discord_webhook(discord)?;
+        }
         Ok(())
     }
 }

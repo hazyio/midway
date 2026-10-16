@@ -28,10 +28,22 @@ midway init
 
 The current setup prompt accepts one webhook URL per configuration. Creating additional Slack webhooks does not add more Midway prompts; use a separate configuration for another channel.
 
+You can also add the webhook URL directly to `midway.yaml` under `tokens.slack`:
+
+```yaml
+tokens:
+  slack: "https://hooks.slack.com/services/WORKSPACE_ID/BOT_ID/WEBHOOK_TOKEN"
+```
+
 <Note>
   Slack may limit message delivery from apps that have not been published or
   distributed. Limits can depend on Slack's current policies, so check Slack's
   documentation before relying on an unpublished app for high-volume
   notifications.
 </Note>
-  Slack generally limits message posting to one message per second per channel, including messages sent through incoming webhooks. Short bursts may be allowed, but sustained higher-volume posting can be rate-limited. Some API methods have additional limits for certain non-Marketplace apps. See Slack's [rate limit documentation](https://docs.slack.dev/apis/web-api/rate-limits) for current details.
+Slack generally limits message posting to one message per second per channel,
+including messages sent through incoming webhooks. Short bursts may be allowed,
+but sustained higher-volume posting can be rate-limited. Some API methods have
+additional limits for certain non-Marketplace apps. See Slack's [rate limit
+documentation](https://docs.slack.dev/apis/web-api/rate-limits) for current
+details.
