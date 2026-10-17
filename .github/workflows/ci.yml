@@ -29,3 +29,9 @@ jobs:
 
       - name: Run checks
         run: bash scripts/check.sh
+
+      - name: Verify release build
+        run: cargo build --workspace --release --locked --verbose
+
+      - name: Check package
+        run: cargo package --workspace --allow-dirty --no-verify

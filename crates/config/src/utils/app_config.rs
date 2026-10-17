@@ -73,7 +73,7 @@ mod tests {
     #[test]
     fn reads_command_notifications_section() {
         let config = AppConfig::from_yaml(
-            "command_notifications:\n  notify_while_running: false\n  minimum_runtime_for_completion_notification_seconds: 7\n  running_notification_interval_seconds: 23\n  log_lines_to_include: 4\n",
+            "tokens: {}\ncommand_notifications:\n  notify_while_running: false\n  minimum_runtime_for_completion_notification_seconds: 7\n  running_notification_interval_seconds: 23\n  log_lines_to_include: 4\n",
         )
         .unwrap();
         let settings = config.command_notifications();

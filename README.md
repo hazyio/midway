@@ -31,7 +31,7 @@ See the [Midway documentation](https://midway.hazyio.com/) for [installation opt
 
 ## Development
 
-Install the stable Rust toolchain with the `rustfmt` and `clippy` components. On Linux, also install `pkg-config` and the OpenSSL development headers (on Ubuntu: `sudo apt-get install pkg-config libssl-dev`). Then run this from the repository root before opening a pull request; it runs the same checks as CI.
+Install the stable Rust toolchain with the `rustfmt` and `clippy` components. On Linux, also install `pkg-config` and the OpenSSL development headers (on Ubuntu: `sudo apt-get install pkg-config libssl-dev`). Run this from the repository root to check formatting and Clippy rules before opening a pull request. CI also runs tests, release builds, and a package check.
 
 ```bash
 bash scripts/check.sh
