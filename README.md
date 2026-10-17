@@ -1,6 +1,6 @@
 # Midway
 
-Midway runs shell commands and sends a completion notification after a command exits if it ran longer than a configured threshold. The default threshold is 10 seconds; change `notify_after.minimum_send_after` in `midway.yaml` to adjust it. Midway does not currently send progress notifications while a command is still running. Notifications can be sent to local desktop notifications and configured messaging services.
+Midway runs shell commands and can send periodic notifications while they run, followed by a completion notification. Running notifications are enabled by default and repeat every 15 seconds; completion notifications are sent for commands that run at least 10 seconds. Configure `command_notifications` in `midway.yaml` to change this behavior. Notifications can be sent to local desktop notifications and configured messaging services.
 
 ## Quick start
 
@@ -31,17 +31,15 @@ See the [Midway documentation](https://midway.hazyio.com/) for [installation opt
 
 ## Development
 
-Install the stable Rust toolchain, then run these checks from the repository root before opening a pull request. All four checks must pass; CI runs the same commands.
+Install the stable Rust toolchain with the `rustfmt` and `clippy` components. On Linux, also install `pkg-config` and the OpenSSL development headers (on Ubuntu: `sudo apt-get install pkg-config libssl-dev`). Run this from the repository root to check formatting and Clippy rules before opening a pull request. CI also runs tests, release builds, and a package check.
 
 ```bash
-cargo fmt --all --check
-cargo clippy --workspace --all-targets -- -D warnings
-cargo test --workspace
-cargo build --workspace --release
+bash scripts/check.sh
 ```
 
 ## Roadmap
 
+- [ ] Handle log_lines_to_include in [notify_after](crates/config/src/utils/notify_after.rs#L14)
 - [ ] Handle chained commands
 - [ ] Microsoft Teams
 - [ ] Google Chat

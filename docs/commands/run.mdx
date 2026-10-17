@@ -9,11 +9,18 @@ Use `midway run` followed by the program and its arguments:
 midway run cargo build --release
 ```
 
-Midway starts the program directly and waits for it to exit. Arguments are passed to the program as provided; Midway does not interpret shell operators, pipes, or variable expansion. To use shell features, invoke a shell explicitly, for example `midway run sh -c 'cargo build && echo done'` on Linux or macOS.
+## Arguments
 
-After the process exits, Midway sends a completion notification if it ran longer than `notify_after.minimum_send_after` (10 seconds by default). The notification reports whether the command succeeded or failed. Midway does not send progress notifications while the command is still running.
+| Argument              | Required | Description                                                                                                                                         |
+| --------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `<COMMAND> [ARGS]`    | Yes      | Program to run and its arguments. Midway passes these directly to the program; it does not interpret shell operators, pipes, or variable expansion. |
+| `-c, --config <PATH>` | No       | Read configuration from this path instead of `midway.yaml` in the current directory.                                                                |
 
-Midway reads `midway.yaml` from the current working directory. Select another config file with `--config`:
+To use shell features, invoke a shell explicitly, for example `midway run sh -c 'cargo build && echo done'` on Linux or macOS.
+
+When `command_notifications.notify_while_running` is enabled, Midway sends a "still running" notification every `command_notifications.running_notification_interval_seconds` seconds while the command is running (15 seconds by default). The first notification is sent after that interval, not at launch. After the process exits, Midway sends a completion notification if the command ran for at least `command_notifications.minimum_runtime_for_completion_notification_seconds` (10 seconds by default). The completion notification reports whether the command succeeded or failed.
+
+Midway reads `midway.yaml` from the current working directory by default. Select another config file with `-c` or `--config`:
 
 ```bash
 midway --config ./config/midway.yaml run cargo test

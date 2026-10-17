@@ -25,7 +25,14 @@ pub struct NotificationConfig {
 
 impl NotificationConfig {
     pub fn send_to(&self) -> &[SendFrom] {
-        self.send_to.as_deref().unwrap_or_default()
+        self.send_to.as_deref().unwrap_or(&[
+            SendFrom::Slack,
+            SendFrom::Discord,
+            SendFrom::Telegram,
+            SendFrom::Ntfy,
+            SendFrom::Local,
+            SendFrom::Email,
+        ])
     }
     pub fn pick_from(&self) -> PickFrom {
         self.pick_from.clone().unwrap_or(PickFrom::All)

@@ -27,14 +27,11 @@ jobs:
 
       - uses: Swatinem/rust-cache@v2
 
-      - name: Check formatting
-        run: cargo fmt --all --check
+      - name: Run checks
+        run: bash scripts/check.sh
 
-      - name: Run Clippy
-        run: cargo clippy --workspace --all-targets -- -D warnings
+      - name: Verify release build
+        run: cargo build --workspace --release --locked --verbose
 
-      - name: Run tests
-        run: cargo test --workspace
-
-      - name: Build release binaries
-        run: cargo build --workspace --release
+      - name: Check package
+        run: cargo package --workspace --allow-dirty --no-verify

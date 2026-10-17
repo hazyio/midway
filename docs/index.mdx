@@ -3,11 +3,11 @@ title: "Introduction"
 description: "Get notified when your commands finish running."
 ---
 
-Midway runs commands and sends a completion notification after a command exits if it ran longer than a configured threshold. The default threshold is 10 seconds; change `notify_after.minimum_send_after` in `midway.yaml` to adjust it. Midway does not currently send progress notifications while a command is still running. Send notifications to your desktop or configure a messaging service.
+Midway runs commands and can send periodic notifications while they run, then a completion notification when they finish. Running notifications are enabled by default and repeat every 15 seconds; completion notifications are sent for commands that run at least 10 seconds. Configure `command_notifications` in `midway.yaml` to adjust these settings. Send notifications to your desktop or configure a messaging service.
 
 ## Quick start
 
-Install Midway with Cargo, create a configuration, and run a command:
+Install Midway with Cargo, or choose [another installation method](/installation/index), then create a configuration and run a command:
 
 ```bash
 cargo install midway-cli

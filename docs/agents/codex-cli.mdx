@@ -13,7 +13,7 @@ Add hooks to `.codex/hooks.json` in a trusted project or `~/.codex/hooks.json`. 
         "hooks": [
           {
             "type": "command",
-            "command": "midway send-text -m \"Codex finished\""
+            "command": "midway send-text --background -m \"Codex finished\""
           }
         ]
       }
@@ -23,7 +23,7 @@ Add hooks to `.codex/hooks.json` in a trusted project or `~/.codex/hooks.json`. 
         "hooks": [
           {
             "type": "command",
-            "command": "midway send-text -m \"Codex needs approval\""
+            "command": "midway send-text --background -m \"Codex needs approval\""
           }
         ]
       }
@@ -31,5 +31,7 @@ Add hooks to `.codex/hooks.json` in a trusted project or `~/.codex/hooks.json`. 
   }
 }
 ```
+
+`--background` lets the notification send continue if Codex or its hook is interrupted. Remove the flag if you want the hook to wait for the send to finish. See [send-text](/commands/send-text) for details.
 
 Codex requires you to review and trust a new or changed hook before it runs. Use `/hooks` in Codex to review it.

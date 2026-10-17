@@ -22,6 +22,17 @@ Invoke-RestMethod https://raw.githubusercontent.com/hazyio/midway/main/install.p
 
 The latest GitHub release must include a `midway-<rust-target>.zip` asset containing `midway.exe`.
 
+To check for and install an update, download the script and pass `update`:
+
+```powershell
+$installer = Join-Path $env:TEMP "install-midway.ps1"
+Invoke-WebRequest https://raw.githubusercontent.com/hazyio/midway/main/install.ps1 -OutFile $installer
+& $installer update
+Remove-Item $installer
+```
+
+Update mode checks the `midway.exe` found on your `PATH`. If `INSTALL_DIR` is set, it checks and updates `midway.exe` in that directory instead. If the installed version matches the latest release, the installer reports that Midway is up to date and exits without replacing it.
+
 Verify the installation:
 
 ```powershell

@@ -24,10 +24,12 @@ Create `.agents/hooks/midway-stop.sh`:
 
 ```sh
 #!/bin/sh
-midway send-text -m "Antigravity CLI finished" || true
+midway send-text --background -m "Antigravity CLI finished" || true
 printf '{"decision":"allow"}\n'
 ```
 
 The script returns `allow` even if sending the notification fails, so a Midway error does not prevent the agent from stopping. Make sure `midway` is on the hook process's `PATH` and the working directory has a usable `midway.yaml`. See [Midway configuration](/config) for routing notifications.
+
+`--background` lets the send continue if Antigravity CLI or the hook is interrupted. Remove the flag if you want the hook to wait for the send to finish. See [send-text](/commands/send-text) for details.
 
 See Google's [Antigravity hooks reference](https://antigravity.google/docs/hooks) for other events, handler formats, and app-specific locations, and its [Gemini CLI migration guide](https://antigravity.google/docs/cli/gcli-migration).

@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     branches:
-      - master
+      - main
 
 permissions:
   contents: write
@@ -62,9 +62,51 @@ jobs:
           name: midway-${{ matrix.target }}
           path: ${{ matrix.archive }}
 
+  publish:
+    name: Publish crates.io packages
+    needs: build
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install Linux system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pkg-config libssl-dev
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Publish workspace crates
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_PUBLISH }}
+        run: |
+          if [ -z "$CARGO_REGISTRY_TOKEN" ]; then
+            echo "::error::Set the CARGO_PUBLISH repository secret to a crates.io publishing token."
+            exit 1
+          fi
+
+          for package in midway-config midway-logging midway-notifier midway-cli; do
+            version=$(cargo metadata --no-deps --format-version 1 | jq -r --arg name "$package" '.packages[] | select(.name == $name) | .version')
+            status=$(curl --silent --show-error --location --output /dev/null --write-out "%{http_code}" "https://crates.io/api/v1/crates/$package/$version")
+
+            if [ "$status" = "200" ]; then
+              echo "$package $version is already published; skipping."
+            elif [ "$status" = "404" ]; then
+              cargo publish --locked --package "$package"
+            else
+              echo "::error::Could not check crates.io for $package $version (HTTP $status)."
+              exit 1
+            fi
+          done
+
   release:
     name: Create GitHub Release
-    needs: build
+    needs: [build, publish]
     runs-on: ubuntu-latest
 
     steps:

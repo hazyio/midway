@@ -2,6 +2,15 @@
 name = "midway-cli"
 version = "0.1.0"
 edition = "2024"
+authors = ["HazyIo"]
+description = "Run commands and get notified when they finish."
+license = "MIT"
+repository = "https://github.com/hazyio/midway"
+homepage = "https://midway.hazyio.com"
+documentation = "https://midway.hazyio.com"
+readme = "../../README.md"
+keywords = ["cli", "notification", "ai", "messaging", "ai-agents"]
+categories = ["command-line-utilities"]
 
 [[bin]]
 name = "midway"
@@ -16,6 +25,6 @@ whoami = "2.1.3"
 dialoguer = "0.12.0"
 console = "0.16.6"
 
-config = { path = "../config" }
-logging = { path = "../logging" }
-notifier = { path = "../notifier" }
+config = { package = "midway-config", path = "../config", version = "0.1.0" }
+logging = { package = "midway-logging", path = "../logging", version = "0.1.0" }
+notifier = { package = "midway-notifier", path = "../notifier", version = "0.1.0" }
