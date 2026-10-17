@@ -33,7 +33,7 @@ Midway writes logs to rotating daily files in the operating system's cache direc
 
 The current log file uses the `midway.log` prefix; older files are kept with date suffixes.
 
-The `notification` and `notify_after` sections are optional. If either whole section is omitted, Midway uses its defaults.
+The `notification` and `command_notifications` sections are optional. If either whole section is omitted, Midway uses its defaults.
 
 ## Notification destinations
 
@@ -56,23 +56,23 @@ notification:
 
 ## Command notifications
 
-If the `notify_after` section is omitted, its defaults are:
+If the `command_notifications` section is omitted, its defaults are:
 
-| Field                | Default | Description                                                                   |
-| -------------------- | ------- | ----------------------------------------------------------------------------- |
-| `enabled`            | `true`  | Stored configuration flag.                                                    |
-| `minimum_send_after` | `10`    | Minimum command duration in seconds before a completion notification is sent. |
-| `notify_after`       | `15`    | Stored repeat interval; it does not currently send progress notifications.    |
-| `send_lines_log`     | `5`     | Stored log-line count; it does not currently affect notifications.            |
+| Field                                                 | Default | Description                                                                                           |
+| ----------------------------------------------------- | ------- | ----------------------------------------------------------------------------------------------------- |
+| `notify_while_running`                                | `true`  | Send a running notification. `run` sends one at launch; `open` repeats it at the configured interval. |
+| `minimum_runtime_for_completion_notification_seconds` | `10`    | Minimum command runtime, in seconds, before sending a completion notification.                        |
+| `running_notification_interval_seconds`               | `15`    | Seconds between running notifications in `open`.                                                      |
+| `log_lines_to_include`                                | `5`     | Reserved for including command output in notifications; it does not currently affect behavior.        |
 
-If you include `notify_after`, provide all four fields:
+If you include `command_notifications`, provide all four fields:
 
 ```yaml
-notify_after:
-	enabled: true
-	minimum_send_after: 10
-	notify_after: 15
-	send_lines_log: 5
+command_notifications:
+  notify_while_running: true
+  minimum_runtime_for_completion_notification_seconds: 10
+  running_notification_interval_seconds: 15
+  log_lines_to_include: 5
 ```
 
-Currently, command execution uses `minimum_send_after` to decide when to send one completion notification after the command exits. Midway does not send periodic notifications while a command is running. The `enabled`, `notify_after`, and `send_lines_log` values are stored but do not currently change runtime behavior.
+`midway run` sends one running notification when the command starts if `notify_while_running` is `true`. `midway open` sends running notifications immediately and then at each `running_notification_interval_seconds` interval when enabled. Both commands send a completion notification after the command runs for at least `minimum_runtime_for_completion_notification_seconds`. Existing configuration files using the `notify_after` section and its old field names are still accepted; new files should use the names shown above.

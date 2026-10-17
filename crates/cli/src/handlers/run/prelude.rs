@@ -7,38 +7,26 @@ use crate::handlers::job::Job;
 
 pub fn run_args(args: Vec<String>, config: Arc<AppConfig>) {
     let combined_command = args.join(" ");
-    let (program, args) = args.split_first().expect("required = true");
     let mut background_job = Job::create();
-    let wait_time = config.notify_after().minimum_send_after;
-    let copy_combined_command = combined_command.clone();
+
+    let (program, args) = args.split_first().expect("required = true");
+
+    let notification_settings = config.command_notifications();
     let stop = Arc::new(AtomicBool::new(false));
-    let s = Arc::clone(&stop);
-    let copy_config = config.clone();
-    notifier::send_text(
-        &format!("{} is still running", copy_combined_command),
-        copy_config.clone(),
+    tracing::info!(
+        "Starting background notification job for {}",
+        combined_command
     );
-    // spawn a background job to send periodic notifications while the main command is running
-    // background_job.new_job(move || {
-    //     while !s.load(Ordering::Relaxed) {
-    //         // send notification if still running
-    //         notifier::send_text(
-    //             &format!("{} is still running", copy_combined_command),
-    //             copy_config.clone(),
-    //         );
-    //         std::thread::sleep(std::time::Duration::from_secs(wait_time as u64));
-    //     }
-    // });
+    background_job.start_command_watcher(&combined_command, Arc::clone(&stop), Arc::clone(&config));
+
     let start_time = std::time::Instant::now();
     let status = Command::new(program).args(args).status();
     let elapsed = start_time.elapsed();
-
     // master stop signal to background job
     stop.store(true, Ordering::Relaxed);
+    // close all background jobs
     background_job.wait_all();
-    let notify_after = &config.notify_after();
-    // send final notification if the command ran longer than the minimum send after time
-    if elapsed.as_secs_f64() > notify_after.minimum_send_after as f64 {
+    if notification_settings.should_send_completion_notification(elapsed) {
         notifier::send_status(&combined_command, status, elapsed, config);
     }
 }

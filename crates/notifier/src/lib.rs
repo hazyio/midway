@@ -42,6 +42,19 @@ pub fn send_text_background(message: &str) -> std::io::Result<()> {
     cmd.spawn()?; // drop the Child without waiting; it keeps running
     Ok(())
 }
+pub fn send_message(
+    title: &str,
+    body: &str,
+    priority: i32,
+    config: Arc<config::app_config::AppConfig>,
+) {
+    let message = Message {
+        title: title.to_string(),
+        body: body.to_string(),
+        priority,
+    };
+    send(config, &message);
+}
 pub fn send_text(message: &str, config: Arc<config::app_config::AppConfig>) {
     let notification = &config.notification();
     let send_to = &notification.send_to();

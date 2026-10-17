@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Deserialize, Serialize, Default)]
 pub struct AppConfig {
     pub tokens: TokenConfig,
-    pub notify_after: Option<crate::notify_after::NotifyAfter>,
+    pub command_notifications: Option<crate::notify_after::NotifyAfter>,
     pub notification: Option<crate::notification::NotificationConfig>,
 }
 
@@ -14,8 +14,8 @@ impl AppConfig {
     pub fn notification(&self) -> crate::notification::NotificationConfig {
         self.notification.clone().unwrap_or_default()
     }
-    pub fn notify_after(&self) -> crate::notify_after::NotifyAfter {
-        self.notify_after.clone().unwrap_or_default()
+    pub fn command_notifications(&self) -> crate::notify_after::NotifyAfter {
+        self.command_notifications.clone().unwrap_or_default()
     }
     pub fn read_from(path: &Path) -> Self {
         match fs::read_to_string(path) {
@@ -63,5 +63,27 @@ impl AppConfig {
             verifier::email_address(&email_smtp.to_email)?;
         }
         Ok(())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::AppConfig;
+
+    #[test]
+    fn reads_legacy_notification_section_name() {
+        let config = AppConfig::from_yaml(
+            "notify_after:\n  enable_send_during: false\n  minimum_send_after: 7\n  notify_after: 23\n  send_lines_log: 4\n",
+        )
+        .unwrap();
+        let settings = config.command_notifications().unwrap_or_default();
+
+        assert!(!settings.notify_while_running);
+        assert_eq!(
+            settings.minimum_runtime_for_completion_notification_seconds,
+            7
+        );
+        assert_eq!(settings.running_notification_interval_seconds, 23);
+        assert_eq!(settings.log_lines_to_include, 4);
     }
 }

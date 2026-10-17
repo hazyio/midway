@@ -1,6 +1,6 @@
 # Midway
 
-Midway runs shell commands and sends a completion notification after a command exits if it ran longer than a configured threshold. The default threshold is 10 seconds; change `notify_after.minimum_send_after` in `midway.yaml` to adjust it. Midway does not currently send progress notifications while a command is still running. Notifications can be sent to local desktop notifications and configured messaging services.
+Midway runs shell commands and sends a completion notification after a command runs for at least a configured threshold (10 seconds by default). It can also send notifications while commands run. Configure `command_notifications` in `midway.yaml` to control notification timing. Notifications can be sent to local desktop notifications and configured messaging services.
 
 ## Quick start
 
