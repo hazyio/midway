@@ -52,8 +52,8 @@ If the `notify_after` section is omitted, its defaults are:
 | -------------------- | ------- | ----------------------------------------------------------------------------- |
 | `enabled`            | `true`  | Stored configuration flag.                                                    |
 | `minimum_send_after` | `10`    | Minimum command duration in seconds before a completion notification is sent. |
-| `notify_after`       | `15`    | Configured repeat interval in seconds.                                        |
-| `send_lines_log`     | `5`     | Configured number of command log lines.                                       |
+| `notify_after`       | `15`    | Stored repeat interval; it does not currently send progress notifications.    |
+| `send_lines_log`     | `5`     | Stored log-line count; it does not currently affect notifications.            |
 
 If you include `notify_after`, provide all four fields:
 
@@ -65,4 +65,4 @@ notify_after:
 	send_lines_log: 5
 ```
 
-Currently, command execution uses `minimum_send_after` to decide when to send the completion notification. The other three values are stored but do not currently change runtime behavior.
+Currently, command execution uses `minimum_send_after` to decide when to send one completion notification after the command exits. Midway does not send periodic notifications while a command is running. The `enabled`, `notify_after`, and `send_lines_log` values are stored but do not currently change runtime behavior.

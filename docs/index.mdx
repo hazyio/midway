@@ -3,7 +3,7 @@ title: "Introduction"
 description: "Get notified when your commands finish running."
 ---
 
-Midway runs commands and notifies you when they exceed a duration threshold. The default threshold is 10 seconds. Send notifications to your desktop or configure a messaging service.
+Midway runs commands and sends a completion notification after a command exits if it ran longer than a configured threshold. The default threshold is 10 seconds; change `notify_after.minimum_send_after` in `midway.yaml` to adjust it. Midway does not currently send progress notifications while a command is still running. Send notifications to your desktop or configure a messaging service.
 
 ## Quick start
 
