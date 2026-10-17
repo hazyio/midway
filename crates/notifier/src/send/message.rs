@@ -69,6 +69,13 @@ impl Message {
             telegram_body(&self.body),
         )
     }
+    pub fn html(&self) -> String {
+        format!(
+            "<h1>{}</h1><br />{}",
+            html_escape(&self.title),
+            telegram_body(&self.body),
+        )
+    }
 }
 
 fn telegram_body(body: &str) -> String {

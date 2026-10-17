@@ -112,3 +112,67 @@ fn pick_any<T>(methods: &[T], amount: usize) -> Vec<&T> {
     use rand::seq::IndexedRandom;
     methods.sample(&mut rand::rng(), amount).collect()
 }
+
+#[cfg(test)]
+mod tests {
+    use std::collections::HashSet;
+
+    use super::{pick_all, pick_any, pick_half, pick_one_third, pick_random};
+
+    #[test]
+    fn picks_one_method_at_random() {
+        let methods = [10, 20, 30, 40, 50];
+
+        assert!(methods.contains(pick_random(&methods)));
+    }
+
+    #[test]
+    fn picks_rounded_up_half_without_duplicates() {
+        let methods = [10, 20, 30, 40, 50];
+        let selected = pick_half(&methods);
+
+        assert_eq!(selected.len(), 3);
+        assert!(selected.iter().all(|method| methods.contains(method)));
+        assert_eq!(selected.iter().copied().collect::<HashSet<_>>().len(), 3);
+    }
+
+    #[test]
+    fn picks_rounded_up_third() {
+        let methods = [10, 20, 30, 40, 50];
+
+        assert_eq!(pick_one_third(&methods).len(), 2);
+    }
+
+    #[test]
+    fn picks_all_methods() {
+        let methods = [10, 20, 30];
+
+        assert_eq!(pick_all(&methods), methods.iter().collect::<Vec<_>>());
+        assert!(pick_all::<i32>(&[]).is_empty());
+    }
+
+    #[test]
+    fn picks_requested_count_without_duplicates() {
+        let methods = [10, 20, 30, 40, 50];
+        let selected = pick_any(&methods, 2);
+
+        assert_eq!(selected.len(), 2);
+        assert!(selected.iter().all(|method| methods.contains(method)));
+        assert_eq!(selected.iter().copied().collect::<HashSet<_>>().len(), 2);
+    }
+
+    #[test]
+    fn any_returns_all_when_requested_count_reaches_or_exceeds_length() {
+        let methods = [10, 20, 30];
+
+        assert_eq!(pick_any(&methods, methods.len()), pick_all(&methods));
+        assert_eq!(pick_any(&methods, methods.len() + 1), pick_all(&methods));
+    }
+
+    #[test]
+    fn any_returns_no_methods_when_zero_requested() {
+        let methods = [10, 20, 30];
+
+        assert!(pick_any(&methods, 0).is_empty());
+    }
+}

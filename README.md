@@ -5,4 +5,3 @@
 - [ ] Zulip
 - [ ] Matrix
 - [ ] Generic webhook
-- [ ] Email
