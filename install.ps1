@@ -9,8 +9,8 @@ $processArchitecture = if ($env:PROCESSOR_ARCHITEW6432) {
 
 switch ($processArchitecture) {
     "AMD64" { $target = "x86_64-pc-windows-msvc" }
-    "ARM64" { $target = "aarch64-pc-windows-msvc" }
-    default { throw "Unsupported Windows architecture: $processArchitecture" }
+    "ARM64" { throw "No prebuilt Midway release is available for ARM64 Windows. Install Rust and Cargo, then run: cargo install midway-cli" }
+    default { throw "Unsupported Windows architecture: $processArchitecture. See https://midway.hazyio.com/installation for supported builds." }
 }
 
 $installDir = if ($env:INSTALL_DIR) {

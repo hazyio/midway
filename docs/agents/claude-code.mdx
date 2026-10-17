@@ -1,0 +1,34 @@
+---
+title: "Claude Code"
+description: "Send Midway notifications from Claude Code hooks"
+---
+
+Add these hooks to `.claude/settings.json` for a project or `~/.claude/settings.json` for your user. `Stop` runs when Claude finishes a response; the filtered `Notification` hook runs when Claude needs input.
+
+```json
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "midway send-text -m \"Claude Code finished\""
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "agent_needs_input",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "midway send-text -m \"Claude Code needs input\""
+          }
+        ]
+      }
+    ]
+  }
+}
+```

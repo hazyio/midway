@@ -10,6 +10,8 @@ Install Midway with Cargo:
 cargo install midway-cli
 ```
 
+Prebuilt releases are available for Linux x86_64, Windows x86_64, and Apple Silicon macOS (aarch64). On ARM64 Windows, ARM64 Linux, or Intel macOS (x86_64), install Rust and Cargo and use the command above to build Midway for your machine.
+
 Create a configuration, then run a command through Midway:
 
 ```bash

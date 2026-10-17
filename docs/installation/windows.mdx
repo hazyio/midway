@@ -9,7 +9,9 @@ Run this in PowerShell to download and run the installer:
 Invoke-RestMethod https://raw.githubusercontent.com/hazyio/midway/main/install.ps1 | Invoke-Expression
 ```
 
-The installer downloads the latest matching Windows release, installs `midway.exe` under `%LOCALAPPDATA%\Programs\Midway`, and adds that directory to your user `PATH`. Open a new terminal if `midway` is not available in the current one.
+The installer supports Windows x86_64. It downloads the matching release, installs `midway.exe` under `%LOCALAPPDATA%\Programs\Midway`, and adds that directory to your user `PATH`. Open a new terminal if `midway` is not available in the current one.
+
+ARM64 Windows does not currently have a prebuilt release. The installer reports this and directs you to [build with Cargo](/installation/cargo).
 
 To choose another install directory, set `INSTALL_DIR` before running the installer:
 

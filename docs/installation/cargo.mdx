@@ -9,6 +9,14 @@ Install Rust and Cargo with [rustup](https://rustup.rs/), then install Midway:
 cargo install midway-cli
 ```
 
+Cargo builds Midway for your current machine. Use this method for ARM64 Windows, ARM64 Linux, or Intel macOS (x86_64), which do not have prebuilt release archives.
+
+Install your platform's native build tools before compiling:
+
+- Linux: a C compiler, `pkg-config`, and OpenSSL development headers. On Debian or Ubuntu, install `build-essential pkg-config libssl-dev`.
+- Windows: Visual Studio Build Tools with the C++ build tools workload.
+- macOS: Xcode Command Line Tools (`xcode-select --install`).
+
 Verify the installation:
 
 ```bash

@@ -1,0 +1,28 @@
+---
+title: "AI agent notifications"
+description: "Connect coding-agent lifecycle hooks to Midway notifications"
+---
+
+Use agent lifecycle hooks to call `midway send-text` when an agent finishes or needs approval. Choose your agent's guide:
+
+- [Claude Code](/agents/claude-code)
+- [Codex CLI](/agents/codex-cli)
+- [GitHub Copilot](/agents/github-copilot)
+- [Gemini CLI](/agents/gemini-cli)
+- [Antigravity CLI](/agents/antigravity-cli)
+- [OpenCode](/agents/opencode)
+- [Cursor](/agents/cursor)
+
+Before enabling a hook:
+
+- Make sure `midway` is on the hook process's `PATH`.
+- Make sure the hook's working directory contains `midway.yaml`, or pass a config path with `--config` before `send-text`.
+- Configure notification destinations in Midway. See [configuration](/config) and the [notification guides](/notifications/local).
+
+For example, to select a config explicitly:
+
+```bash
+midway --config /path/to/midway.yaml send-text -m "Agent finished"
+```
+
+Hooks execute commands with your user permissions. Only add hook commands you trust. A completion event can fire more than once per session, so notifications may be sent for each completed turn rather than only when you close the agent.

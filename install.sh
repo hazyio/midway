@@ -9,11 +9,13 @@ ARCH=$(uname -m)
 
 case "$OS/$ARCH" in
     Linux/x86_64) TARGET="x86_64-unknown-linux-gnu" ;;
-    Linux/aarch64 | Linux/arm64) TARGET="aarch64-unknown-linux-gnu" ;;
-    Darwin/x86_64) TARGET="x86_64-apple-darwin" ;;
     Darwin/arm64 | Darwin/aarch64) TARGET="aarch64-apple-darwin" ;;
+    Linux/aarch64 | Linux/arm64 | Darwin/x86_64)
+        printf 'No prebuilt Midway release is available for %s/%s. Install Rust and Cargo, then run: cargo install midway-cli\n' "$OS" "$ARCH" >&2
+        exit 1
+        ;;
     *)
-        printf 'Unsupported platform: %s/%s\n' "$OS" "$ARCH" >&2
+        printf 'Unsupported platform: %s/%s. See https://midway.hazyio.com/installation for supported builds.\n' "$OS" "$ARCH" >&2
         exit 1
         ;;
 esac

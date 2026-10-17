@@ -1,0 +1,33 @@
+---
+title: "Antigravity CLI"
+description: "Send Midway notifications when Antigravity CLI stops"
+---
+
+Antigravity CLI supports lifecycle hooks, including `Stop`. There is no general hook event for when the agent needs user input.
+
+For a workspace-level hook, create `.agents/hooks.json` in the project root. The example calls a small shell script so it can send the Midway notification and return the JSON decision Antigravity expects from a `Stop` hook.
+
+```json
+{
+  "midway-notifications": {
+    "Stop": [
+      {
+        "type": "command",
+        "command": "sh .agents/hooks/midway-stop.sh"
+      }
+    ]
+  }
+}
+```
+
+Create `.agents/hooks/midway-stop.sh`:
+
+```sh
+#!/bin/sh
+midway send-text -m "Antigravity CLI finished" || true
+printf '{"decision":"allow"}\n'
+```
+
+The script returns `allow` even if sending the notification fails, so a Midway error does not prevent the agent from stopping. Make sure `midway` is on the hook process's `PATH` and the working directory has a usable `midway.yaml`. See [Midway configuration](/config) for routing notifications.
+
+See Google's [Antigravity hooks reference](https://antigravity.google/docs/hooks) for other events, handler formats, and app-specific locations, and its [Gemini CLI migration guide](https://antigravity.google/docs/cli/gcli-migration).
