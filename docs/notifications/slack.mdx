@@ -1,0 +1,60 @@
+---
+title: "Slack notifications"
+description: "Connect Midway to a Slack channel with an incoming webhook"
+---
+
+## Create a Slack app
+
+1. Go to [api.slack.com/apps](https://api.slack.com/apps) and select **Create New App**.
+2. Choose **Starter app** and select the Slack workspace where the app will run.
+3. Open **OAuth & Permissions**. Under **Bot Token Scopes**, add `chat:write`.
+
+## Enable incoming webhooks
+
+1. In your app settings, open **Incoming Webhooks**.
+2. Turn on **Activate Incoming Webhooks**.
+3. Select **Add New Webhook to Workspace**. Choose the channel where Midway should post and authorize the app.
+4. Copy the generated webhook URL.
+
+Each incoming webhook is tied to the channel selected when it is created. Slack grants the `incoming-webhook` permission as part of creating the webhook; this is separate from the `chat:write` bot scope. You can create additional webhooks for other channels from **Incoming Webhooks**.
+
+## Add the webhook to Midway
+
+Run the Midway setup command and paste the webhook URL when prompted:
+
+```bash
+midway init
+```
+
+By default, Midway sends notifications to all configured methods. To restrict delivery, define `notification.send_to` and include `Slack`; configured methods left out of the list will not receive notifications. With `pick_from: All`, Midway sends through every method listed there:
+
+```yaml
+notification:
+  send_to:
+    - Slack
+  pick_from: All
+```
+
+`pick_from` can further select a subset of the methods in `send_to` for each notification.
+
+The current setup prompt accepts one webhook URL per configuration. Creating additional Slack webhooks does not add more Midway prompts; use a separate configuration for another channel.
+
+You can also add the webhook URL directly to `midway.yaml` under `tokens.slack`:
+
+```yaml
+tokens:
+  slack: "https://hooks.slack.com/services/WORKSPACE_ID/BOT_ID/WEBHOOK_TOKEN"
+```
+
+<Note>
+  Slack may limit message delivery from apps that have not been published or
+  distributed. Limits can depend on Slack's current policies, so check Slack's
+  documentation before relying on an unpublished app for high-volume
+  notifications.
+</Note>
+Slack generally limits message posting to one message per second per channel,
+including messages sent through incoming webhooks. Short bursts may be allowed,
+but sustained higher-volume posting can be rate-limited. Some API methods have
+additional limits for certain non-Marketplace apps. See Slack's [rate limit
+documentation](https://docs.slack.dev/apis/web-api/rate-limits) for current
+details.

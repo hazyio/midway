@@ -1,0 +1,39 @@
+---
+title: "Email notifications"
+description: "Configure SMTP settings for Midway"
+---
+
+## Configure SMTP
+
+Run the Midway setup command and enter your SMTP server hostname or IP address when prompted. The setup then asks for the SMTP port (default `587`), username, password, sender address, and recipient address. Leave the server prompt empty to skip SMTP setup.
+
+The settings are saved under `tokens.email_smtp` in `midway.yaml`:
+
+```yaml
+tokens:
+	email_smtp:
+		smtp_server: "smtp.example.com"
+		smtp_port: 587
+		username: "SMTP_USERNAME"
+		password: "SMTP_PASSWORD"
+		from_email: "sender@example.com"
+		to_email: "recipient@example.com"
+```
+
+## Enable email notifications
+
+By default, Midway sends notifications to all configured methods. To restrict delivery to email, define `notification.send_to` with `Email` in the list:
+
+```yaml
+notification:
+	send_to:
+		- Email
+	pick_from: All
+```
+
+When `notification.send_to` is defined, configured methods left out of the list will not receive notifications. `pick_from` can further select a subset of the listed methods; `All` selects every listed method.
+
+<Warning>
+  The SMTP password is stored in `midway.yaml`, so protect that file as you
+  would any file containing credentials.
+</Warning>
