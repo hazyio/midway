@@ -1,3 +1,32 @@
 ---
 title: "Introduction"
+description: "Get notified when your commands finish running."
 ---
+
+Midway runs commands and notifies you when they exceed a duration threshold. The default threshold is 10 seconds. Send notifications to your desktop or configure a messaging service.
+
+## Quick start
+
+Install Midway with Cargo, create a configuration, and run a command:
+
+```bash
+cargo install midway-cli
+midway init
+midway run cargo build
+```
+
+To send a notification directly:
+
+```bash
+midway send-text --message "Build finished"
+```
+
+By default, Midway selects all notification methods. Set `notification.send_to` in `midway.yaml` to restrict the methods, and use `pick_from` to control how many listed methods receive each notification.
+
+## Continue
+
+- [Install Midway](/installation/index)
+- [Configure Midway](/config)
+- [Initialize configuration](/commands/init)
+- [Open Midway](/commands/open)
+- [Notification guides](/notifications/local)

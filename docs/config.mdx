@@ -1,3 +1,68 @@
 ---
 title: "Configuration"
+description: "Configure notification services and delivery behavior"
 ---
+
+Midway reads `midway.yaml` from the current working directory. Create a starting file with `midway init`, or choose another path with `--config`:
+
+```bash
+midway --config ./config/midway.yaml run cargo build
+```
+
+## Configuration sections
+
+The top-level `tokens` section contains optional credentials for notification services. Add only the services you use. Local desktop notifications do not require credentials.
+
+| Key          | Fields                                                                       | Description                                    |
+| ------------ | ---------------------------------------------------------------------------- | ---------------------------------------------- |
+| `slack`      | Webhook URL                                                                  | Slack incoming webhook URL.                    |
+| `discord`    | Webhook URL                                                                  | Discord webhook URL.                           |
+| `telegram`   | `token`, `chat_id`                                                           | Telegram bot token and numeric chat ID.        |
+| `ntfy`       | `server_url`, `topic`                                                        | Ntfy server URL and topic.                     |
+| `email_smtp` | `smtp_server`, `smtp_port`, `username`, `password`, `from_email`, `to_email` | SMTP connection and sender/recipient settings. |
+
+Credentials are stored in `midway.yaml` as plain text. Protect the file and avoid committing it to a public repository.
+
+The `notification` and `notify_after` sections are optional. If either whole section is omitted, Midway uses its defaults.
+
+## Notification destinations
+
+By default, `send_to` contains all notification methods: `Local`, `Slack`, `Ntfy`, `Discord`, `Telegram`, and `Email`. External services still need their credentials under `tokens` to deliver notifications.
+
+If you define a `notification` section, set `send_to` explicitly. When the section is present but `send_to` is omitted, no destinations are selected. When `send_to` is set, only listed methods are eligible; configured methods left out are skipped. `pick_from` defaults to `All`, which selects every method in `send_to`.
+
+For example, this configuration sends only to local desktop notifications and Slack:
+
+```yaml
+tokens: {}
+notification:
+	send_to:
+		- Local
+		- Slack
+	pick_from: All
+```
+
+`pick_from` also accepts `Random`, `Half`, `OneThird`, and `Any` with a count to select one, about half, about one third, or up to the requested number of methods from the `send_to` list.
+
+## Command notifications
+
+If the `notify_after` section is omitted, its defaults are:
+
+| Field                | Default | Description                                                                   |
+| -------------------- | ------- | ----------------------------------------------------------------------------- |
+| `enabled`            | `true`  | Stored configuration flag.                                                    |
+| `minimum_send_after` | `10`    | Minimum command duration in seconds before a completion notification is sent. |
+| `notify_after`       | `15`    | Configured repeat interval in seconds.                                        |
+| `send_lines_log`     | `5`     | Configured number of command log lines.                                       |
+
+If you include `notify_after`, provide all four fields:
+
+```yaml
+notify_after:
+	enabled: true
+	minimum_send_after: 10
+	notify_after: 15
+	send_lines_log: 5
+```
+
+Currently, command execution uses `minimum_send_after` to decide when to send the completion notification. The other three values are stored but do not currently change runtime behavior.
