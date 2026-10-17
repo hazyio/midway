@@ -354,16 +354,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "config"
-version = "0.1.0"
-dependencies = [
- "email_address",
- "noyalib",
- "serde",
- "url",
-]
-
-[[package]]
 name = "console"
 version = "0.16.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1018,16 +1008,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f9f8bd3e56ce4dfc153cf470fffbfa98c7620958b312ca5c3a4b8d5181fd13c6"
 
 [[package]]
-name = "logging"
-version = "0.1.0"
-dependencies = [
- "dirs",
- "tracing",
- "tracing-appender",
- "tracing-subscriber",
-]
-
-[[package]]
 name = "mac-notification-sys"
 version = "0.6.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1070,15 +1050,49 @@ name = "midway-cli"
 version = "0.1.0"
 dependencies = [
  "clap",
- "config",
  "console",
  "dialoguer",
- "logging",
- "notifier",
+ "midway-config",
+ "midway-logging",
+ "midway-notifier",
  "rustyline",
  "tracing",
  "tracing-subscriber",
  "whoami",
+]
+
+[[package]]
+name = "midway-config"
+version = "0.1.0"
+dependencies = [
+ "email_address",
+ "noyalib",
+ "serde",
+ "url",
+]
+
+[[package]]
+name = "midway-logging"
+version = "0.1.0"
+dependencies = [
+ "dirs",
+ "tracing",
+ "tracing-appender",
+ "tracing-subscriber",
+]
+
+[[package]]
+name = "midway-notifier"
+version = "0.1.0"
+dependencies = [
+ "lettre",
+ "midway-config",
+ "notify-rust",
+ "rand",
+ "serde",
+ "serde_json",
+ "tracing",
+ "ureq",
 ]
 
 [[package]]
@@ -1153,20 +1167,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "df9761775871bdef83bee530e60050f7e54b1105350d6884eb0fb4f46c2f9405"
 dependencies = [
  "memchr",
-]
-
-[[package]]
-name = "notifier"
-version = "0.1.0"
-dependencies = [
- "config",
- "lettre",
- "notify-rust",
- "rand",
- "serde",
- "serde_json",
- "tracing",
- "ureq",
 ]
 
 [[package]]

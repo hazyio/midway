@@ -38,3 +38,10 @@ jobs:
 
       - name: Build release binaries
         run: cargo build --workspace --release
+
+      - name: Verify release build
+        run: cargo build --workspace --release --locked --verbose
+
+      - name: Check package
+        run: cargo package --workspace --allow-dirty --no-verify
+          

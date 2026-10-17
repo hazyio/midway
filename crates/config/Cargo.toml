@@ -1,7 +1,13 @@
 [package]
-name = "config"
+name = "midway-config"
 version = "0.1.0"
 edition = "2024"
+authors = ["HazyIo"]
+description = "Configuration types and validation for Midway."
+license = "MIT"
+repository = "https://github.com/hazyio/midway"
+homepage = "https://midway.hazyio.com"
+documentation = "https://midway.hazyio.com/config"
 
 [dependencies]
 email_address = "0.2"

@@ -1,7 +1,13 @@
 [package]
-name = "logging"
+name = "midway-logging"
 version = "0.1.0"
 edition = "2024"
+authors = ["HazyIo"]
+description = "File logging setup for Midway."
+license = "MIT"
+repository = "https://github.com/hazyio/midway"
+homepage = "https://midway.hazyio.com"
+documentation = "https://midway.hazyio.com"
 
 [dependencies]
 tracing = "0.1.44"
