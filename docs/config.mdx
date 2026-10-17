@@ -3,7 +3,7 @@ title: "Configuration"
 description: "Configure notification services and delivery behavior"
 ---
 
-Midway reads `midway.yaml` from the current working directory. Create a starting file with `midway init`, or choose another path with `--config`:
+Midway reads `midway.yaml` from the current working directory. Create a starting file with `midway init`, or choose another path with `-c` or `--config`:
 
 ```bash
 midway --config ./config/midway.yaml run cargo build
@@ -58,12 +58,12 @@ notification:
 
 If the `command_notifications` section is omitted, its defaults are:
 
-| Field                                                 | Default | Description                                                                                           |
-| ----------------------------------------------------- | ------- | ----------------------------------------------------------------------------------------------------- |
-| `notify_while_running`                                | `true`  | Send a running notification. `run` sends one at launch; `open` repeats it at the configured interval. |
-| `minimum_runtime_for_completion_notification_seconds` | `10`    | Minimum command runtime, in seconds, before sending a completion notification.                        |
-| `running_notification_interval_seconds`               | `15`    | Seconds between running notifications in `open`.                                                      |
-| `log_lines_to_include`                                | `5`     | Reserved for including command output in notifications; it does not currently affect behavior.        |
+| Field                                                 | Default | Description                                                                                            |
+| ----------------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------ |
+| `notify_while_running`                                | `true`  | Enable periodic running notifications for commands started with `run` or `open`.                       |
+| `minimum_runtime_for_completion_notification_seconds` | `10`    | Minimum command runtime, in seconds, before sending a completion notification.                         |
+| `running_notification_interval_seconds`               | `15`    | Seconds between running notifications in both `run` and `open`; the first is sent after this interval. |
+| `log_lines_to_include`                                | `5`     | Reserved for including command output in notifications; it does not currently affect behavior.         |
 
 If you include `command_notifications`, provide all four fields:
 
@@ -75,4 +75,4 @@ command_notifications:
   log_lines_to_include: 5
 ```
 
-`midway run` sends one running notification when the command starts if `notify_while_running` is `true`. `midway open` sends running notifications immediately and then at each `running_notification_interval_seconds` interval when enabled. Both commands send a completion notification after the command runs for at least `minimum_runtime_for_completion_notification_seconds`. Existing configuration files using the `notify_after` section and its old field names are still accepted; new files should use the names shown above.
+When `notify_while_running` is `true`, `midway run` and `midway open` send a running notification after each `running_notification_interval_seconds` interval while the command is still running. Both commands send a completion notification if the command runs for at least `minimum_runtime_for_completion_notification_seconds`. These settings are independent: a command can receive running notifications without qualifying for a completion notification, or vice versa. Existing configuration files using the `notify_after` section and its old field names are still accepted; new files should use the names shown above.

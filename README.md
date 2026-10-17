@@ -1,6 +1,6 @@
 # Midway
 
-Midway runs shell commands and sends a completion notification after a command runs for at least a configured threshold (10 seconds by default). It can also send notifications while commands run. Configure `command_notifications` in `midway.yaml` to control notification timing. Notifications can be sent to local desktop notifications and configured messaging services.
+Midway runs shell commands and can send periodic notifications while they run, followed by a completion notification. Running notifications are enabled by default and repeat every 15 seconds; completion notifications are sent for commands that run at least 10 seconds. Configure `command_notifications` in `midway.yaml` to change this behavior. Notifications can be sent to local desktop notifications and configured messaging services.
 
 ## Quick start
 
@@ -42,6 +42,7 @@ cargo build --workspace --release
 
 ## Roadmap
 
+- [ ] Handle log_lines_to_include in [notify_after](crates/config/src/utils/notify_after.rs#L14)
 - [ ] Handle chained commands
 - [ ] Microsoft Teams
 - [ ] Google Chat

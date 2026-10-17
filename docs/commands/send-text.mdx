@@ -9,7 +9,15 @@ Use `midway send-text` to send a notification without running a command:
 midway send-text --message "Deployment finished"
 ```
 
-The `--message` option is required. Midway sends the text immediately through the notification methods selected by `notification.send_to` and `pick_from`; it does not apply the command-duration threshold used by `midway run`.
+## Arguments
+
+| Argument               | Required | Description                                                                          |
+| ---------------------- | -------- | ------------------------------------------------------------------------------------ |
+| `-m, --message <TEXT>` | Yes      | Text to send.                                                                        |
+| `-b, --background`     | No       | Start the send in a detached process and return immediately.                         |
+| `-c, --config <PATH>`  | No       | Read configuration from this path instead of `midway.yaml` in the current directory. |
+
+Midway sends the text immediately through the notification methods selected by `notification.send_to` and `pick_from`; it does not apply the command-duration threshold used by `midway run`.
 
 ## Send in the background
 
@@ -23,7 +31,7 @@ Midway returns after starting the send. Pressing Ctrl+C or terminating the shell
 
 Background sends use `midway.yaml` from the current working directory. Make sure that file is available where the detached process starts.
 
-Midway reads `midway.yaml` from the current working directory. Select another config file with `--config`:
+Midway reads `midway.yaml` from the current working directory by default. Select another config file with `-c` or `--config`:
 
 ```bash
 midway --config ./config/midway.yaml send-text --message "Deployment finished"

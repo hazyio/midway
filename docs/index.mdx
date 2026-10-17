@@ -3,7 +3,7 @@ title: "Introduction"
 description: "Get notified when your commands finish running."
 ---
 
-Midway runs commands and sends notifications while they run and when they finish. `midway run` sends a start notification; `midway open` also sends periodic running updates. Both send a completion notification after the command runs for at least the configured threshold, 10 seconds by default. Configure `command_notifications` in `midway.yaml` to adjust these settings. Send notifications to your desktop or configure a messaging service.
+Midway runs commands and can send periodic notifications while they run, then a completion notification when they finish. Running notifications are enabled by default and repeat every 15 seconds; completion notifications are sent for commands that run at least 10 seconds. Configure `command_notifications` in `midway.yaml` to adjust these settings. Send notifications to your desktop or configure a messaging service.
 
 ## Quick start
 
