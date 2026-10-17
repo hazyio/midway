@@ -2,6 +2,15 @@
 name = "midway-cli"
 version = "0.1.0"
 edition = "2024"
+authors = ["HazyIo"]
+description = "Run commands and get notified when they finish."
+license = "MIT"
+repository = "https://github.com/hazyio/midway"
+homepage = "https://midway.hazyio.com"
+documentation = "https://midway.hazyio.com"
+readme = "../../README.md"
+keywords = ["cli", "notification", "ai", "messaging", "ai-agents"]
+categories = ["command-line-utilities"]
 
 [[bin]]
 name = "midway"
