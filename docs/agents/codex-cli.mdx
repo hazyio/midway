@@ -1,0 +1,35 @@
+---
+title: "Codex CLI"
+description: "Send Midway notifications from Codex CLI hooks"
+---
+
+Add hooks to `.codex/hooks.json` in a trusted project or `~/.codex/hooks.json`. `Stop` notifies when a turn finishes. `PermissionRequest` notifies when Codex is waiting for approval to use a tool; it does not cover other clarification requests.
+
+```json
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "midway send-text -m \"Codex finished\""
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "midway send-text -m \"Codex needs approval\""
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Codex requires you to review and trust a new or changed hook before it runs. Use `/hooks` in Codex to review it.

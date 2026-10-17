@@ -86,14 +86,10 @@ fn collect_telegram() -> Option<TelegramToken> {
                 Some(|s: &String| verifier::telegram_chat_id(s)),
                 None,
             );
-            if let Some(chat_id) = chat_id {
-                Some(TelegramToken {
-                    token,
-                    chat_id: chat_id.parse::<u64>().unwrap(),
-                })
-            } else {
-                None
-            }
+            chat_id.map(|h| TelegramToken {
+                token: token.clone(),
+                chat_id: h.parse::<u64>().unwrap(),
+            })
         }
         _ => None,
     }
@@ -114,14 +110,10 @@ fn collect_ntfy() -> Option<NtfyConfig> {
                 Some(|s: &String| verifier::ntfy_topic(s)),
                 None,
             );
-            if let Some(topic) = topic {
-                Some(NtfyConfig {
-                    server_url: server,
-                    topic: topic,
-                })
-            } else {
-                None
-            }
+            topic.map(|t| NtfyConfig {
+                server_url: server.clone(),
+                topic: t,
+            })
         }
         None => None,
     }

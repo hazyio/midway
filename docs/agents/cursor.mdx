@@ -1,0 +1,21 @@
+---
+title: "Cursor"
+description: "Send Midway notifications from Cursor hooks"
+---
+
+Add a project-level `.cursor/hooks.json` file. Cursor's `stop` hook runs when the agent loop ends:
+
+```json
+{
+  "version": 1,
+  "hooks": {
+    "stop": [
+      {
+        "command": "midway send-text -m \"Cursor agent finished\""
+      }
+    ]
+  }
+}
+```
+
+Cursor does not currently provide a general hook event for notifying when the agent needs input. Its shell and MCP hooks run before operations, not when the agent is waiting for a response.

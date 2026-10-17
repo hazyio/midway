@@ -1,0 +1,47 @@
+---
+title: "Gemini CLI"
+description: "Send Midway notifications from Gemini CLI hooks"
+---
+
+Add hooks to `.gemini/settings.json`. `AfterAgent` notifies after a response; `Notification` forwards Gemini CLI system alerts.
+
+<Warning>
+  Gemini CLI was replaced by Antigravity CLI for unpaid-tier and Google One
+  users on June 18, 2026. Gemini CLI remains available to some enterprise
+  customers and paid API-key users. If you are moving to Antigravity CLI, see
+  the [Antigravity CLI hook guide](/agents/antigravity-cli) and Google's
+  [migration guide](https://antigravity.google/docs/cli/gcli-migration).
+</Warning>
+
+```json
+{
+  "hooks": {
+    "AfterAgent": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "name": "midway-agent-finished",
+            "type": "command",
+            "command": "midway send-text -m \"Gemini CLI finished\""
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "name": "midway-agent-notification",
+            "type": "command",
+            "command": "midway send-text -m \"Gemini CLI needs attention\""
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Gemini CLI hooks run synchronously. A `Notification` hook fires for system alerts, not necessarily every time the agent asks a free-form question.

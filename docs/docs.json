@@ -43,6 +43,20 @@
           },
           {
             "expanded": false,
+            "group": "AI Agents",
+            "pages": [
+              "agents/index",
+              "agents/claude-code",
+              "agents/codex-cli",
+              "agents/github-copilot",
+              "agents/gemini-cli",
+              "agents/antigravity-cli",
+              "agents/opencode",
+              "agents/cursor"
+            ]
+          },
+          {
+            "expanded": false,
             "group": "Notifications",
             "pages": [
               "notifications/local",

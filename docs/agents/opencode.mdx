@@ -1,0 +1,21 @@
+---
+title: "OpenCode"
+description: "Send Midway notifications from OpenCode plugins"
+---
+
+OpenCode uses plugins for lifecycle events. Save this plugin as `.opencode/plugins/midway-notifications.js`:
+
+```js
+export const MidwayNotifications = async ({ $ }) => ({
+  event: async ({ event }) => {
+    if (event.type === "session.idle") {
+      await $`midway send-text -m "OpenCode finished"`;
+    }
+    if (event.type === "permission.asked") {
+      await $`midway send-text -m "OpenCode needs approval"`;
+    }
+  },
+});
+```
+
+OpenCode loads local plugins from `.opencode/plugins/` when it starts.

@@ -8,7 +8,7 @@ impl Job {
             pending: Vec::new(),
         }
     }
-    pub fn new_job<F>(&mut self,  f: F)
+    pub fn new_job<F>(&mut self, f: F)
     where
         F: FnOnce() + Send + 'static,
     {
