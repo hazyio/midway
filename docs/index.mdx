@@ -21,6 +21,12 @@ To send a notification directly:
 midway send-text --message "Build finished"
 ```
 
+## AI agent notifications
+
+Use your coding agent's lifecycle hooks to call `midway send-text` when an agent finishes or needs approval. Guides for Claude Code, Codex CLI, GitHub Copilot, Gemini CLI, Antigravity CLI, OpenCode, and Cursor are in the [agent documentation](/agents/index).
+
+Use `--background` in hooks so the notification still sends if the agent or hook process is interrupted.
+
 By default, Midway selects all notification methods. Set `notification.send_to` in `midway.yaml` to restrict the methods, and use `pick_from` to control how many listed methods receive each notification.
 
 ## Continue
@@ -30,3 +36,4 @@ By default, Midway selects all notification methods. Set `notification.send_to` 
 - [Initialize configuration](/commands/init)
 - [Open Midway](/commands/open)
 - [Notification guides](/notifications/local)
+- [AI agent hooks](/agents)

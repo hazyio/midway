@@ -29,6 +29,12 @@ midway send-text --message "Build finished"
 
 See the [Midway documentation](https://midway.hazyio.com/) for [installation options](https://midway.hazyio.com/installation), [configuration](https://midway.hazyio.com/config), [commands](https://midway.hazyio.com/commands/init), and [notification setup](https://midway.hazyio.com/notifications/local).
 
+## AI agent notifications
+
+Use your coding agent's lifecycle hooks to call `midway send-text` when an agent finishes or needs approval. Guides for Claude Code, Codex CLI, GitHub Copilot, Gemini CLI, Antigravity CLI, OpenCode, and Cursor are in the [docs](https://midway.hazyio.com/agents/index).
+
+Use `--background` in hooks so the notification still sends if the agent or hook process is interrupted.
+
 ## Development
 
 Install the stable Rust toolchain with the `rustfmt` and `clippy` components. On Linux, also install `pkg-config` and the OpenSSL development headers (on Ubuntu: `sudo apt-get install pkg-config libssl-dev`). Run this from the repository root to check formatting and Clippy rules before opening a pull request. CI also runs tests, release builds, and a package check.
