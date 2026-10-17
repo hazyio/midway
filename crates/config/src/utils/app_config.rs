@@ -76,7 +76,7 @@ mod tests {
             "notify_after:\n  enable_send_during: false\n  minimum_send_after: 7\n  notify_after: 23\n  send_lines_log: 4\n",
         )
         .unwrap();
-        let settings = config.command_notifications().unwrap_or_default();
+        let settings = config.command_notifications();
 
         assert!(!settings.notify_while_running);
         assert_eq!(

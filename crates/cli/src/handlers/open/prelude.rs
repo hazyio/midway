@@ -61,11 +61,7 @@ pub fn run_open(config: Arc<AppConfig>) -> rustyline::Result<()> {
         command.arg("-c");
 
         let stop = Arc::new(AtomicBool::new(false));
-        background_job.start_command_watcher(
-            &line.to_string(),
-            Arc::clone(&stop),
-            Arc::clone(&config),
-        );
+        background_job.start_command_watcher(line, Arc::clone(&stop), Arc::clone(&config));
 
         let start_time = std::time::Instant::now();
 
