@@ -31,13 +31,10 @@ See the [Midway documentation](https://midway.hazyio.com/) for [installation opt
 
 ## Development
 
-Install the stable Rust toolchain, then run these checks from the repository root before opening a pull request. All four checks must pass; CI runs the same commands.
+Install the stable Rust toolchain with the `rustfmt` and `clippy` components, then run this from the repository root before opening a pull request. It runs the same checks as CI.
 
 ```bash
-cargo fmt --all --check
-cargo clippy --workspace --all-targets -- -D warnings
-cargo test --workspace
-cargo build --workspace --release
+./scripts/check.sh
 ```
 
 ## Roadmap

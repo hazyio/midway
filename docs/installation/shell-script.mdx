@@ -14,6 +14,14 @@ sh install.sh
 
 Set `INSTALL_DIR` to install somewhere else. The installer expects a `midway-<rust-target>.tar.gz` release asset containing the `midway` executable.
 
+To check for and install an update, run the installer with the `update` argument:
+
+```bash
+sh install.sh update
+```
+
+Update mode checks the version of `midway` found on your `PATH`. If `INSTALL_DIR` is set, it checks and updates `midway` in that directory instead. If the installed version matches the latest release, the installer reports that Midway is up to date and exits without replacing it.
+
 Verify the installation:
 
 ```bash

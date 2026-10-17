@@ -1,8 +1,16 @@
 #!/bin/sh
 set -eu
 
+MODE=install
+if [ "$#" -gt 1 ] || { [ "$#" -eq 1 ] && [ "$1" != "update" ]; }; then
+    printf 'Usage: sh install.sh [update]\n' >&2
+    exit 2
+fi
+if [ "$#" -eq 1 ]; then
+    MODE=update
+fi
+
 REPOSITORY="hazyio/midway"
-INSTALL_DIR=${INSTALL_DIR:-"${HOME:?HOME must be set}/.local/bin"}
 
 OS=$(uname -s)
 ARCH=$(uname -m)
@@ -19,6 +27,38 @@ case "$OS/$ARCH" in
         exit 1
         ;;
 esac
+
+if [ "$MODE" = "update" ]; then
+    printf 'Checking for Midway updates...\n'
+    if [ -n "${INSTALL_DIR:-}" ]; then
+        if [ ! -d "$INSTALL_DIR" ]; then
+            printf 'Install directory does not exist: %s\n' "$INSTALL_DIR" >&2
+            exit 1
+        fi
+        INSTALL_DIR=$(CDPATH= cd -- "$INSTALL_DIR" && pwd)
+        INSTALLED_BIN="$INSTALL_DIR/midway"
+    else
+        if ! INSTALLED_BIN=$(command -v midway); then
+            printf "Midway is not installed. Run 'sh install.sh' to install it first.\n" >&2
+            exit 1
+        fi
+        case "$INSTALLED_BIN" in
+            /*) ;;
+            *) INSTALLED_BIN="$(pwd)/$INSTALLED_BIN" ;;
+        esac
+        INSTALL_DIR=$(dirname "$INSTALLED_BIN")
+    fi
+    if [ ! -x "$INSTALLED_BIN" ]; then
+        printf 'Midway was not found at %s.\n' "$INSTALLED_BIN" >&2
+        exit 1
+    fi
+    if ! CURRENT_VERSION=$("$INSTALLED_BIN" --version); then
+        printf 'Could not read the installed Midway version from %s.\n' "$INSTALLED_BIN" >&2
+        exit 1
+    fi
+else
+    INSTALL_DIR=${INSTALL_DIR:-"${HOME:?HOME must be set}/.local/bin"}
+fi
 
 if ! command -v curl >/dev/null 2>&1; then
     printf 'curl is required to install Midway.\n' >&2
@@ -52,9 +92,22 @@ if ! tar -xzf "$TEMP_DIR/$ASSET" -C "$TEMP_DIR" midway; then
     exit 1
 fi
 
-if [ ! -f "$TEMP_DIR/midway" ]; then
+if [ ! -x "$TEMP_DIR/midway" ]; then
     printf 'The release archive does not contain a midway executable.\n' >&2
     exit 1
+fi
+
+if ! RELEASE_VERSION=$("$TEMP_DIR/midway" --version); then
+    printf 'Could not read the Midway version from the downloaded release.\n' >&2
+    exit 1
+fi
+
+if [ "$MODE" = "update" ]; then
+    if [ "$CURRENT_VERSION" = "$RELEASE_VERSION" ]; then
+        printf 'Midway is up to date (%s). Exiting.\n' "$CURRENT_VERSION"
+        exit 0
+    fi
+    printf 'Updating Midway from %s to %s...\n' "$CURRENT_VERSION" "$RELEASE_VERSION"
 fi
 
 mkdir -p "$INSTALL_DIR"
@@ -64,7 +117,11 @@ chmod 755 "$STAGED_BINARY"
 mv "$STAGED_BINARY" "$INSTALL_DIR/midway"
 STAGED_BINARY=
 
-printf 'Installed midway to %s/midway\n' "$INSTALL_DIR"
+if [ "$MODE" = "update" ]; then
+    printf 'Updated midway to %s/midway\n' "$INSTALL_DIR"
+else
+    printf 'Installed midway to %s/midway\n' "$INSTALL_DIR"
+fi
 case ":${PATH}:" in
     *":${INSTALL_DIR}:"*) ;;
     *) printf 'Add %s to your PATH to run midway from any directory.\n' "$INSTALL_DIR" ;;
