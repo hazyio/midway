@@ -22,3 +22,8 @@ impl Job {
         }
     }
 }
+impl Drop for Job {
+    fn drop(&mut self) {
+        self.wait_all();
+    }
+}

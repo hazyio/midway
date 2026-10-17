@@ -47,3 +47,41 @@ fn default_config() -> PathBuf {
 
     path.join("midway.yaml")
 }
+
+#[cfg(test)]
+mod tests {
+    use super::{Cli, CliCommands, default_config};
+    use std::{env, path::PathBuf};
+
+    fn cli_with_config(config: Option<PathBuf>) -> Cli {
+        Cli {
+            command: CliCommands::Open,
+            config,
+        }
+    }
+
+    #[test]
+    fn default_config_uses_midway_yaml_in_current_directory() {
+        assert_eq!(
+            default_config(),
+            env::current_dir().unwrap().join("midway.yaml")
+        );
+    }
+
+    #[test]
+    fn config_path_returns_existing_explicit_path() {
+        let path = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("Cargo.toml");
+
+        assert_eq!(cli_with_config(Some(path.clone())).config_path(), path);
+    }
+
+    #[test]
+    #[should_panic(expected = "Config file does not exist:")]
+    fn config_path_panics_when_explicit_path_does_not_exist() {
+        let path =
+            env::temp_dir().join(format!("midway-missing-config-{}.yaml", std::process::id()));
+        assert!(!path.exists());
+
+        cli_with_config(Some(path)).config_path();
+    }
+}

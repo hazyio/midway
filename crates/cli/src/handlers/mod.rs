@@ -4,3 +4,4 @@ pub mod open;
 pub mod prelude;
 mod prompt;
 pub mod run;
+mod builtin;
