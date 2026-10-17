@@ -3,21 +3,13 @@ use std::{fs, path::Path};
 use crate::{token_config::TokenConfig, verifier};
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Default)]
 pub struct AppConfig {
     pub tokens: TokenConfig,
     pub notify_after: Option<crate::notify_after::NotifyAfter>,
     pub notification: Option<crate::notification::NotificationConfig>,
 }
-impl Default for AppConfig {
-    fn default() -> Self {
-        Self {
-            tokens: TokenConfig::default(),
-            notify_after: None,
-            notification: None,
-        }
-    }
-}
+
 impl AppConfig {
     pub fn notification(&self) -> crate::notification::NotificationConfig {
         let un = self.notification.clone().unwrap_or_default();

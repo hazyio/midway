@@ -9,5 +9,3 @@ pub fn init_logging() {
         .with_thread_ids(false)
         .init();
 }
-
-

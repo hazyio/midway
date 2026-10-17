@@ -17,27 +17,12 @@ pub enum PickFrom {
     All,
     Any(usize),
 }
-#[derive(Deserialize, Serialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone, Default)]
 pub struct NotificationConfig {
     pub send_to: Option<Vec<SendFrom>>,
     pub pick_from: Option<PickFrom>,
 }
 
-impl Default for NotificationConfig {
-    fn default() -> Self {
-        Self {
-            send_to: Some(vec![
-                SendFrom::Local,
-                SendFrom::Slack,
-                SendFrom::Ntfy,
-                SendFrom::Discord,
-                SendFrom::Telegram,
-                SendFrom::Email,
-            ]),
-            pick_from: Some(PickFrom::All),
-        }
-    }
-}
 impl NotificationConfig {
     pub fn send_to(&self) -> &[SendFrom] {
         self.send_to

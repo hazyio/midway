@@ -27,6 +27,17 @@ midway send-text --message "Build finished"
 
 See the [Midway documentation](https://midway.hazyio.com/) for [installation options](https://midway.hazyio.com/installation), [configuration](https://midway.hazyio.com/config), [commands](https://midway.hazyio.com/commands/init), and [notification setup](https://midway.hazyio.com/notifications/local).
 
+## Development
+
+Install the stable Rust toolchain, then run these checks from the repository root before opening a pull request. All four checks must pass; CI runs the same commands.
+
+```bash
+cargo fmt --all --check
+cargo clippy --workspace --all-targets -- -D warnings
+cargo test --workspace
+cargo build --workspace --release
+```
+
 ## Roadmap
 
 - [ ] Handle chained commands
