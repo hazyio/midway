@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Default)]
 pub struct TokenConfig {
     pub slack: Option<String>,
     pub discord: Option<String>,
@@ -9,17 +9,6 @@ pub struct TokenConfig {
     pub email_smtp: Option<EmailSmtpConfig>,
 }
 
-impl Default for TokenConfig {
-    fn default() -> Self {
-        Self {
-            slack: None,
-            discord: None,
-            telegram: None,
-            ntfy: None,
-            email_smtp: None,
-        }
-    }
-}
 #[derive(Deserialize, Serialize)]
 
 pub struct TelegramToken {

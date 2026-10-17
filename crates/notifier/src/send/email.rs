@@ -11,8 +11,8 @@ use crate::send::message::Message as SendMessage;
 pub fn send_email_notification(message: &SendMessage, config: &EmailSmtpConfig) -> bool {
     let from_email = config.from_email.parse().unwrap();
     let to_email = config.to_email.parse().unwrap();
-    let title = message.title.to_owned();
-    let body = message.html().to_owned();
+    let title = message.title.clone();
+    let body = message.html();
     // build the email message
     let email = Message::builder()
         .from(from_email)

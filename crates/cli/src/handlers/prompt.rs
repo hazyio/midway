@@ -1,4 +1,4 @@
-use std::{default, path::Path};
+use std::path::Path;
 
 use console::Style;
 use dialoguer::{Confirm, Input, Password, theme::ColorfulTheme};
@@ -23,10 +23,10 @@ impl Prompt {
     }
     pub fn render(&self, cwd: &Path) -> String {
         let mut dir = cwd.to_string_lossy().into_owned();
-        if let Some(home) = &self.home {
-            if let Some(rest) = dir.strip_prefix(home.as_str()) {
-                dir = format!("~{rest}");
-            }
+        if let Some(home) = &self.home
+            && let Some(rest) = dir.strip_prefix(home.as_str())
+        {
+            dir = format!("~{rest}");
         }
         let sigil = if self.user == "root" { '#' } else { '$' };
         format!(
@@ -36,7 +36,7 @@ impl Prompt {
     }
 }
 fn unwrap_theme(theme: Option<ColorfulTheme>) -> ColorfulTheme {
-    theme.unwrap_or_else(|| ColorfulTheme::default())
+    theme.unwrap_or_default()
 }
 pub(super) fn warning_theme() -> ColorfulTheme {
     ColorfulTheme {

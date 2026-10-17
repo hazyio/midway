@@ -12,12 +12,10 @@ pub struct AppConfig {
 
 impl AppConfig {
     pub fn notification(&self) -> crate::notification::NotificationConfig {
-        let un = self.notification.clone().unwrap_or_default();
-        un.clone()
+        self.notification.clone().unwrap_or_default()
     }
     pub fn notify_after(&self) -> crate::notify_after::NotifyAfter {
-        let un = self.notify_after.clone().unwrap_or_default();
-        un.clone()
+        self.notify_after.clone().unwrap_or_default()
     }
     pub fn read_from(path: &Path) -> Self {
         match fs::read_to_string(path) {

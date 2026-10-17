@@ -16,7 +16,7 @@ pub fn send_status(
         return;
     }
     let message = Message::from_status(&status, command, elapsed);
-    send(config.clone(), &message);
+    send(config, &message);
 }
 pub fn send_text(message: &str, config: Arc<config::app_config::AppConfig>) {
     let notification = &config.notification();
@@ -26,7 +26,7 @@ pub fn send_text(message: &str, config: Arc<config::app_config::AppConfig>) {
         return;
     }
     let message = Message::from_text(message);
-    send(config.clone(), &message);
+    send(config, &message);
 }
 fn send(config: Arc<config::app_config::AppConfig>, message: &Message) {
     let notification = &config.notification();
@@ -43,38 +43,38 @@ fn send(config: Arc<config::app_config::AppConfig>, message: &Message) {
         match method {
             config::notification::SendFrom::Slack => {
                 if let Some(webhook_url) = &config.tokens.slack {
-                    crate::send::slack::send_slack_notification(&message, webhook_url);
+                    crate::send::slack::send_slack_notification(message, webhook_url);
                 } else {
                     tracing::warn!("No Slack webhook URL configured");
                 }
             }
             config::notification::SendFrom::Discord => {
                 if let Some(webhook_url) = &config.tokens.discord {
-                    crate::send::discord::send_discord_notification(&message, webhook_url);
+                    crate::send::discord::send_discord_notification(message, webhook_url);
                 } else {
                     tracing::warn!("No Discord webhook URL configured");
                 }
             }
             config::notification::SendFrom::Telegram => {
                 if let Some(telegram) = &config.tokens.telegram {
-                    crate::send::telegram::send_telegram_notification(&message, telegram);
+                    crate::send::telegram::send_telegram_notification(message, telegram);
                 } else {
                     tracing::warn!("No Telegram token configured");
                 }
             }
             config::notification::SendFrom::Ntfy => {
                 if let Some(ntfy_url) = &config.tokens.ntfy {
-                    crate::send::ntfy::send_ntfy_notification(&message, ntfy_url);
+                    crate::send::ntfy::send_ntfy_notification(message, ntfy_url);
                 } else {
                     tracing::warn!("No Ntfy server URL configured");
                 }
             }
             config::notification::SendFrom::Local => {
-                crate::send::local::send_local_notification(&message);
+                crate::send::local::send_local_notification(message);
             }
             config::notification::SendFrom::Email => {
                 if let Some(email_config) = &config.tokens.email_smtp {
-                    crate::send::email::send_email_notification(&message, email_config);
+                    crate::send::email::send_email_notification(message, email_config);
                 } else {
                     tracing::warn!("No Email SMTP configuration configured");
                 }

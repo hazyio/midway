@@ -25,10 +25,7 @@ pub struct NotificationConfig {
 
 impl NotificationConfig {
     pub fn send_to(&self) -> &[SendFrom] {
-        self.send_to
-            .as_ref()
-            .map(|v| v.as_slice())
-            .unwrap_or_default()
+        self.send_to.as_deref().unwrap_or_default()
     }
     pub fn pick_from(&self) -> PickFrom {
         self.pick_from.clone().unwrap_or(PickFrom::All)
