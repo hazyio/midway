@@ -23,6 +23,16 @@ The top-level `tokens` section contains optional credentials for notification se
 
 Credentials are stored in `midway.yaml` as plain text. Protect the file and avoid committing it to a public repository.
 
+## Log files
+
+Midway writes logs to rotating daily files in the operating system's cache directory:
+
+- Linux: `$XDG_CACHE_HOME/midway` when `XDG_CACHE_HOME` is set; otherwise `~/.cache/midway`.
+- macOS: `~/Library/Caches/midway`.
+- Windows: `%LOCALAPPDATA%\midway`.
+
+The current log file uses the `midway.log` prefix; older files are kept with date suffixes.
+
 The `notification` and `notify_after` sections are optional. If either whole section is omitted, Midway uses its defaults.
 
 ## Notification destinations

@@ -1,3 +1,4 @@
+use std::process::{Command, Stdio};
 use std::{io, sync::Arc, time::Duration};
 
 use crate::send::message::Message;
@@ -18,6 +19,29 @@ pub fn send_status(
     let message = Message::from_status(&status, command, elapsed);
     send(config, &message);
 }
+pub fn send_text_background(message: &str) -> std::io::Result<()> {
+    let mut cmd = Command::new(std::env::current_exe()?);
+    cmd.args(["send-text", "-m", message]) //  -b, or the child respawns forever
+        .stdin(Stdio::null())
+        .stdout(Stdio::null())
+        .stderr(Stdio::null());
+
+    #[cfg(unix)]
+    {
+        use std::os::unix::process::CommandExt;
+        cmd.process_group(0); // own process group, so Ctrl+C in the shell doesn't hit it
+    }
+    #[cfg(windows)]
+    {
+        use std::os::windows::process::CommandExt;
+        const DETACHED_PROCESS: u32 = 0x0000_0008;
+        const CREATE_NEW_PROCESS_GROUP: u32 = 0x0000_0200;
+        cmd.creation_flags(DETACHED_PROCESS | CREATE_NEW_PROCESS_GROUP);
+    }
+
+    cmd.spawn()?; // drop the Child without waiting; it keeps running
+    Ok(())
+}
 pub fn send_text(message: &str, config: Arc<config::app_config::AppConfig>) {
     let notification = &config.notification();
     let send_to = &notification.send_to();
@@ -28,6 +52,7 @@ pub fn send_text(message: &str, config: Arc<config::app_config::AppConfig>) {
     let message = Message::from_text(message);
     send(config, &message);
 }
+
 fn send(config: Arc<config::app_config::AppConfig>, message: &Message) {
     let notification = &config.notification();
     let send_to = &notification.send_to();

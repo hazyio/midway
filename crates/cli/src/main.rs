@@ -32,7 +32,11 @@ fn main() {
             let _ = run_open(app_config.clone());
         }
         CliCommands::SendText(args) => {
-            notifier::send_text(&args.message, app_config.clone());
+            if args.background {
+                let _ = notifier::send_text_background(&args.message);
+            } else {
+                notifier::send_text(&args.message, app_config.clone());
+            }
         }
         CliCommands::Init => {
             panic!("Init command should have been handled earlier.");

@@ -11,7 +11,11 @@ pub struct SendTextArgs {
     /// Text to send, e.g. `midway send-text -m "deploy finished"`
     #[arg(short, long)]
     pub message: String,
+    /// Send message in background.
+    #[arg(short, long)]
+    pub background: bool,
 }
+
 #[derive(Subcommand, PartialEq, Eq)]
 pub enum CliCommands {
     Run(RunArgs),
