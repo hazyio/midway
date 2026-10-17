@@ -18,4 +18,6 @@ Add a project-level `.cursor/hooks.json` file. Cursor's `stop` hook runs when th
 }
 ```
 
+`--background` lets the notification send continue if Cursor or its hook is interrupted. Remove the flag if you want the hook to wait for the send to finish. See [send-text](/commands/send-text) for details.
+
 Cursor does not currently provide a general hook event for notifying when the agent needs input. Its shell and MCP hooks run before operations, not when the agent is waiting for a response.

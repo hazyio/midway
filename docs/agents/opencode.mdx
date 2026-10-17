@@ -18,4 +18,6 @@ export const MidwayNotifications = async ({ $ }) => ({
 });
 ```
 
+`--background` lets the notification send continue if OpenCode or its plugin is interrupted. Remove the flag if you want the plugin to wait for the send to finish. See [send-text](/commands/send-text) for details.
+
 OpenCode loads local plugins from `.opencode/plugins/` when it starts.

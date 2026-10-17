@@ -28,6 +28,8 @@ Create a JSON hook file under `.github/hooks/`, for example `.github/hooks/midwa
 }
 ```
 
+`--background` lets the notification send continue if Copilot CLI or its hook is interrupted. Remove the flag if you want the hook to wait for the send to finish. See [send-text](/commands/send-text) for details. In Copilot cloud agent, the send can still be interrupted when its temporary environment is torn down.
+
 The `notification` event is available in Copilot CLI, but not Copilot cloud agent. It fires asynchronously for matching system notifications, such as when an agent completes or needs approval. `sessionEnd` runs when a session terminates; in Copilot cloud agent, it runs once per job.
 
 Copilot CLI runs hooks on your machine. Copilot cloud agent runs hooks inside a temporary Linux environment, not on your desktop. To use `sessionEnd` there, Midway and its configuration must be made available in that environment. Background sends survive hook cancellation, but the cloud-agent environment can be torn down before a detached send completes. Do not commit notification credentials to the repository; cloud-agent outbound network access may also require an administrator allow rule.
