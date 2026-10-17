@@ -75,4 +75,4 @@ command_notifications:
   log_lines_to_include: 5
 ```
 
-When `notify_while_running` is `true`, `midway run` and `midway open` send a running notification after each `running_notification_interval_seconds` interval while the command is still running. Both commands send a completion notification if the command runs for at least `minimum_runtime_for_completion_notification_seconds`. These settings are independent: a command can receive running notifications without qualifying for a completion notification, or vice versa. Existing configuration files using the `notify_after` section and its old field names are still accepted; new files should use the names shown above.
+When `notify_while_running` is `true`, `midway run` and `midway open` send a running notification after each `running_notification_interval_seconds` interval while the command is still running. Both commands send a completion notification if the command runs for at least `minimum_runtime_for_completion_notification_seconds`. These settings are independent: a command can receive running notifications without qualifying for a completion notification, or vice versa.

@@ -71,9 +71,9 @@ mod tests {
     use super::AppConfig;
 
     #[test]
-    fn reads_legacy_notification_section_name() {
+    fn reads_command_notifications_section() {
         let config = AppConfig::from_yaml(
-            "notify_after:\n  enable_send_during: false\n  minimum_send_after: 7\n  notify_after: 23\n  send_lines_log: 4\n",
+            "command_notifications:\n  notify_while_running: false\n  minimum_runtime_for_completion_notification_seconds: 7\n  running_notification_interval_seconds: 23\n  log_lines_to_include: 4\n",
         )
         .unwrap();
         let settings = config.command_notifications();
@@ -85,5 +85,18 @@ mod tests {
         );
         assert_eq!(settings.running_notification_interval_seconds, 23);
         assert_eq!(settings.log_lines_to_include, 4);
+    }
+
+    #[test]
+    fn defaults_command_notifications_when_missing() {
+        let settings = AppConfig::default().command_notifications();
+
+        assert!(settings.notify_while_running);
+        assert_eq!(
+            settings.minimum_runtime_for_completion_notification_seconds,
+            10
+        );
+        assert_eq!(settings.running_notification_interval_seconds, 15);
+        assert_eq!(settings.log_lines_to_include, 5);
     }
 }
