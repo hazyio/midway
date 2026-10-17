@@ -20,6 +20,19 @@ tokens:
 		to_email: "recipient@example.com"
 ```
 
+## Enable email notifications
+
+By default, Midway sends notifications to all configured methods. To restrict delivery to email, define `notification.send_to` with `Email` in the list:
+
+```yaml
+notification:
+	send_to:
+		- Email
+	pick_from: All
+```
+
+When `notification.send_to` is defined, configured methods left out of the list will not receive notifications. `pick_from` can further select a subset of the listed methods; `All` selects every listed method.
+
 <Warning>
   The SMTP password is stored in `midway.yaml`, so protect that file as you
   would any file containing credentials.

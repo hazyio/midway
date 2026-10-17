@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Clone)]
 pub struct NotifyAfter {
     pub enabled: bool,
     /// The minimum duration (in seconds) after which a command ran before sending a notification. default is 10 this means it will send notifications any time a command ran after 10 seconds.

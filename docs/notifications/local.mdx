@@ -3,11 +3,11 @@ title: "Local notifications"
 description: "Show Midway notifications on your computer"
 ---
 
-Midway can show notifications through your operating system's desktop notification service. No webhook or token is required. Local notifications are not enabled by default.
+Midway can show notifications through your operating system's desktop notification service. No webhook or token is required. Local notifications are included in the default destination list.
 
 ## Enable local notifications
 
-Add `Local` to `notification.send_to` in `midway.yaml`; otherwise, Midway will not send local notifications:
+If you define `notification.send_to` in `midway.yaml`, include `Local` to keep local notifications enabled. This example selects only local notifications:
 
 ```yaml
 notification:
@@ -16,6 +16,6 @@ notification:
 	pick_from: All
 ```
 
-If you already have other notification methods in `send_to`, keep them and add `Local` to the list.
+By default, Midway sends notifications to all configured methods. If you define `notification.send_to`, Midway sends only to methods in that list; configured methods left out are skipped. `pick_from` can further select a subset of the listed methods. Keep any other destinations in the list if you want to continue using them.
 
 Local notifications require a desktop session with system notifications enabled. They may not appear when Midway runs in a headless environment.

@@ -9,7 +9,8 @@ pub fn send_status(
     elapsed: Duration,
     config: Arc<config::app_config::AppConfig>,
 ) {
-    let send_to = &config.notification.send_to;
+    let notification = &config.notification();
+    let send_to = &notification.send_to();
     if send_to.is_empty() {
         tracing::warn!("No send_to addresses configured");
         return;
@@ -18,7 +19,8 @@ pub fn send_status(
     send(config.clone(), &message);
 }
 pub fn send_text(message: &str, config: Arc<config::app_config::AppConfig>) {
-    let send_to = &config.notification.send_to;
+    let notification = &config.notification();
+    let send_to = &notification.send_to();
     if send_to.is_empty() {
         tracing::warn!("No send_to addresses configured");
         return;
@@ -27,9 +29,10 @@ pub fn send_text(message: &str, config: Arc<config::app_config::AppConfig>) {
     send(config.clone(), &message);
 }
 fn send(config: Arc<config::app_config::AppConfig>, message: &Message) {
-    let send_to = &config.notification.send_to;
+    let notification = &config.notification();
+    let send_to = &notification.send_to();
 
-    let send_methods = match config.notification.pick_from {
+    let send_methods = match notification.pick_from() {
         config::notification::PickFrom::Random => vec![pick_random(send_to)],
         config::notification::PickFrom::Half => pick_half(send_to),
         config::notification::PickFrom::OneThird => pick_one_third(send_to),

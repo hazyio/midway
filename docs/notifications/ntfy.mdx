@@ -18,9 +18,10 @@ description: "Connect Midway to ntfy with a server URL and topic"
 	hard-to-guess topic name and keep it private. Make sure it is no more than 64
 	characters and contains only letters, numbers, underscores, or dashes.
 
-	Do not include sensitive information in notification messages. For actual
-	access restrictions, use an authenticated, access-controlled ntfy server or
-	self-host ntfy with authentication configured.
+    Do not include sensitive information in notification messages. For actual
+    access restrictions, use an authenticated, access-controlled ntfy server or
+    self-host ntfy with authentication configured.
+
 </Warning>
 
 ## Add ntfy to Midway
@@ -31,7 +32,7 @@ Run the Midway setup command. Paste the server URL copied from **About**, then e
 midway init
 ```
 
-The server URL and topic alone do not enable ntfy delivery. Add `Ntfy` to `notification.send_to` in `midway.yaml`, or Midway will not send notifications through ntfy. With `pick_from: All`, Midway sends through every method listed there:
+By default, Midway sends notifications to all configured methods. To restrict delivery, define `notification.send_to` and include `Ntfy`; configured methods left out of the list will not receive notifications. With `pick_from: All`, Midway sends through every method listed there:
 
 ```yaml
 notification:
@@ -39,6 +40,8 @@ notification:
 		- Ntfy
 	pick_from: All
 ```
+
+`pick_from` can further select a subset of the methods in `send_to` for each notification.
 
 You can also add the values directly to `midway.yaml` under `tokens.ntfy`:
 

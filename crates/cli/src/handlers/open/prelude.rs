@@ -8,6 +8,7 @@ use crate::handlers::prompt::Prompt;
 
 use super::builtin;
 pub fn run_open(config: Arc<AppConfig>) -> rustyline::Result<()> {
+    let notify_after = &config.notify_after();
     let mut rl = DefaultEditor::new()?;
     let prompt = Prompt::new();
     let mut oldpwd: Option<PathBuf> = None;
@@ -62,7 +63,7 @@ pub fn run_open(config: Arc<AppConfig>) -> rustyline::Result<()> {
         let status = command.arg(line).env("MIDWAY_SHELL", "1").status();
         let elapsed = start_time.elapsed();
 
-        let limit = Duration::from_secs(config.notify_after.minimum_send_after);
+        let limit = Duration::from_secs(notify_after.minimum_send_after);
         if elapsed >= limit {
             let command = format!("{} {}", cmd, arg);
             let config = config.clone();
