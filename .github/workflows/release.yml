@@ -92,7 +92,7 @@ jobs:
 
           for package in midway-config midway-logging midway-notifier midway-cli; do
             version=$(cargo metadata --no-deps --format-version 1 | jq -r --arg name "$package" '.packages[] | select(.name == $name) | .version')
-            status=$(curl --silent --show-error --location --output /dev/null --write-out "%{http_code}" "https://crates.io/api/v1/crates/$package/$version")
+            status=$(curl --silent --show-error --location --output /dev/null --write-out "%{http_code}" --user-agent "midway-release-workflow (https://github.com/hazyio/midway)" "https://crates.io/api/v1/crates/$package/$version")
 
             if [ "$status" = "200" ]; then
               echo "$package $version is already published; skipping."
