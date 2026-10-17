@@ -1,0 +1,22 @@
+---
+title: "Run a command"
+description: "Run a process and get notified when it finishes"
+---
+
+Use `midway run` followed by the program and its arguments:
+
+```bash
+midway run cargo build --release
+```
+
+Midway starts the program directly and waits for it to exit. Arguments are passed to the program as provided; Midway does not interpret shell operators, pipes, or variable expansion. To use shell features, invoke a shell explicitly, for example `midway run sh -c 'cargo build && echo done'` on Linux or macOS.
+
+After the process exits, Midway sends a completion notification if it ran longer than `notify_after.minimum_send_after` (10 seconds by default). The notification reports whether the command succeeded or failed. Midway does not send progress notifications while the command is still running.
+
+Midway reads `midway.yaml` from the current working directory. Select another config file with `--config`:
+
+```bash
+midway --config ./config/midway.yaml run cargo test
+```
+
+See [configuration](/config) to set the duration threshold and notification destinations.

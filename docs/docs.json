@@ -3,9 +3,9 @@
   "theme": "mint",
   "name": "Midway Docs",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#FFB547",
+    "light": "#FFC96B",
+    "dark": "#D98A0B"
   },
   "favicon": "/favicon.svg",
   "navigation": {
@@ -36,7 +36,9 @@
             "group": "Commands",
             "pages": [
               "commands/init",
-              "commands/open"
+              "commands/run",
+              "commands/open",
+              "commands/send-text"
             ]
           },
           {

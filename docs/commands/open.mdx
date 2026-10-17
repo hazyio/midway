@@ -1,0 +1,20 @@
+---
+title: "Open Midway"
+description: "Run commands in Midway's interactive shell"
+---
+
+Run `midway open` to start an interactive shell:
+
+```bash
+midway open
+```
+
+Midway reads `midway.yaml` from the current working directory. To use another configuration file, pass `--config`:
+
+```bash
+midway --config ./config/midway.yaml open
+```
+
+Enter a command at the Midway prompt to run it. The shell supports command history and the built-ins `cd` and `exit`; Ctrl+D also exits. Enter `midway` to print a confirmation that you are in the Midway environment. The command `rm -rf /` is blocked.
+
+After a command exits, Midway sends a completion notification if it ran for at least the configured `notify_after.minimum_send_after` duration (10 seconds by default). It does not send progress notifications while a command is still running. See [configuration](/config) to change the threshold and [notification guides](/notifications/local) to set up destinations.

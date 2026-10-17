@@ -1,0 +1,16 @@
+---
+title: "Initialize configuration"
+description: "Create Midway's midway.yaml configuration file"
+---
+
+Run `midway init` to create `midway.yaml` in the current working directory:
+
+```bash
+midway init
+```
+
+The setup prompts for optional credentials for Slack, Discord, Telegram, ntfy, and email over SMTP. Press Enter to skip a service. To skip email setup, leave the SMTP server prompt empty. SMTP passwords are entered with masked input; the saved credentials are stored in plain text in `midway.yaml`, so protect the file.
+
+Midway also supports local desktop notifications, which do not require credentials. By default, all notification methods are selected; external services need their credentials to deliver notifications. See [configuration](/config) to customize destinations and timing, and the [notification guides](/notifications/local) for provider setup.
+
+If `midway.yaml` already exists in the current directory, `midway init` asks whether to overwrite it. Confirming replaces the file; it does not merge the new answers into the existing configuration.

@@ -1,0 +1,20 @@
+---
+title: "Send a text notification"
+description: "Send a notification immediately with custom text"
+---
+
+Use `midway send-text` to send a notification without running a command:
+
+```bash
+midway send-text --message "Deployment finished"
+```
+
+The `--message` option is required. Midway sends the text immediately through the notification methods selected by `notification.send_to` and `pick_from`; it does not apply the command-duration threshold used by `midway run`.
+
+Midway reads `midway.yaml` from the current working directory. Select another config file with `--config`:
+
+```bash
+midway --config ./config/midway.yaml send-text --message "Deployment finished"
+```
+
+See [configuration](/config) to set notification destinations and [notification guides](/notifications/local) to configure a service.
