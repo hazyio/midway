@@ -11,7 +11,17 @@ description: "Connect Midway to ntfy with a server URL and topic"
 4. Open the three-dot menu in the top-right corner and select **Subscription settings**.
 5. Scroll to **About** and copy the server URL.
 
-Topics are public unless your server requires authentication. Choose a hard-to-guess topic name and keep it private. Topic names can be up to 64 characters and contain only letters, numbers, underscores, and dashes.
+<Warning>
+	On public ntfy servers such as `ntfy.sh`, topics and their notifications are
+	public to anyone who knows or guesses the topic name. Use the [Hazyio password
+	generator](https://gen.hazyio.com/password-generator/) to create a long,
+	hard-to-guess topic name and keep it private. Make sure it is no more than 64
+	characters and contains only letters, numbers, underscores, or dashes.
+
+	Do not include sensitive information in notification messages. For actual
+	access restrictions, use an authenticated, access-controlled ntfy server or
+	self-host ntfy with authentication configured.
+</Warning>
 
 ## Add ntfy to Midway
 

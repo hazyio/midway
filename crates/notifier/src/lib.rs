@@ -69,6 +69,13 @@ fn send(config: Arc<config::app_config::AppConfig>, message: &Message) {
             config::notification::SendFrom::Local => {
                 crate::send::local::send_local_notification(&message);
             }
+            config::notification::SendFrom::Email => {
+                if let Some(email_config) = &config.tokens.email_smtp {
+                    crate::send::email::send_email_notification(&message, email_config);
+                } else {
+                    tracing::warn!("No Email SMTP configuration configured");
+                }
+            }
         }
     }
 }

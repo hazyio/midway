@@ -56,6 +56,14 @@ impl AppConfig {
             verifier::telegram_token(&telegram.token)?;
             verifier::telegram_chat_id(&telegram.chat_id.to_string())?;
         }
+        if let Some(email_smtp) = &self.tokens.email_smtp {
+            verifier::smtp_server(&email_smtp.smtp_server)?;
+            verifier::smtp_port(email_smtp.smtp_port)?;
+            verifier::smtp_username(&email_smtp.username)?;
+            verifier::smtp_password(&email_smtp.password)?;
+            verifier::email_address(&email_smtp.from_email)?;
+            verifier::email_address(&email_smtp.to_email)?;
+        }
         Ok(())
     }
 }

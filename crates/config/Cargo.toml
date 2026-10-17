@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+email_address = "0.2"
 noyalib = { version = "0.0.57" }
 serde = { version = "1.0.229", features = ["derive"] }
 url = "2"

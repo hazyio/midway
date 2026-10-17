@@ -1,3 +1,5 @@
+use email_address::EmailAddress;
+
 pub fn slack_webhook(value: &str) -> Result<(), String> {
     if value.is_empty() {
         return Ok(());
@@ -95,6 +97,46 @@ pub fn ntfy_topic(value: &str) -> Result<(), String> {
     Ok(())
 }
 
+pub fn smtp_server(value: &str) -> Result<(), String> {
+    if url::Host::parse(value).is_err() {
+        return Err("Enter a valid SMTP server hostname or IP address.".to_owned());
+    }
+
+    Ok(())
+}
+
+pub fn smtp_port(value: u16) -> Result<(), String> {
+    if value == 0 {
+        return Err("SMTP port must be greater than 0.".to_owned());
+    }
+
+    Ok(())
+}
+
+pub fn smtp_username(value: &str) -> Result<(), String> {
+    if value.trim().is_empty() {
+        return Err("SMTP username cannot be empty.".to_owned());
+    }
+
+    Ok(())
+}
+
+pub fn smtp_password(value: &str) -> Result<(), String> {
+    if value.trim().is_empty() {
+        return Err("SMTP password cannot be empty.".to_owned());
+    }
+
+    Ok(())
+}
+
+pub fn email_address(value: &str) -> Result<(), String> {
+    if !EmailAddress::is_valid(value) {
+        return Err("Enter a valid email address.".to_owned());
+    }
+
+    Ok(())
+}
+
 pub fn telegram_token(value: &str) -> Result<(), String> {
     if value.is_empty() {
         return Ok(());
@@ -121,7 +163,10 @@ pub fn telegram_chat_id(value: &str) -> Result<(), String> {
 
 #[cfg(test)]
 mod tests {
-    use super::{discord_webhook, ntfy_server_url, ntfy_topic, slack_webhook, telegram_token};
+    use super::{
+        discord_webhook, email_address, ntfy_server_url, ntfy_topic, slack_webhook, smtp_password,
+        smtp_port, smtp_server, smtp_username, telegram_token,
+    };
 
     #[test]
     fn accepts_optional_empty_value() {
@@ -193,6 +238,24 @@ mod tests {
         assert!(ntfy_topic("topic name").is_err());
         assert!(ntfy_topic("topic/name").is_err());
         assert!(ntfy_topic("topic.name").is_err());
+    }
+
+    #[test]
+    fn accepts_valid_smtp_settings() {
+        assert!(smtp_server("smtp.example.com").is_ok());
+        assert!(smtp_port(587).is_ok());
+        assert!(smtp_username("mailer").is_ok());
+        assert!(smtp_password("secret").is_ok());
+        assert!(email_address("alerts@example.com").is_ok());
+    }
+
+    #[test]
+    fn rejects_invalid_smtp_settings() {
+        assert!(smtp_server("smtp server").is_err());
+        assert!(smtp_port(0).is_err());
+        assert!(smtp_username(" ").is_err());
+        assert!(smtp_password("").is_err());
+        assert!(email_address("not-an-email").is_err());
     }
 
     #[test]

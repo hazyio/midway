@@ -7,6 +7,7 @@ pub enum SendFrom {
     Telegram,
     Ntfy,
     Local,
+    Email,
 }
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub enum PickFrom {
@@ -31,6 +32,7 @@ impl Default for NotificationConfig {
                 SendFrom::Ntfy,
                 SendFrom::Discord,
                 SendFrom::Telegram,
+                SendFrom::Email,
             ],
             pick_from: PickFrom::All,
         }

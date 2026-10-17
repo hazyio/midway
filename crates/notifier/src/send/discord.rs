@@ -8,7 +8,7 @@ pub fn send_discord_notification(message: &Message, webhook_url: &str) -> bool {
     match response {
         Ok(_) => true,
         Err(e) => {
-            tracing::error!("Failed to send Discord notification: {}", e);
+            tracing::error!(error = ?e, "Failed to send Discord notification");
             false
         }
     }

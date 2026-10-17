@@ -9,7 +9,7 @@ pub fn send_local_notification(message: &Message) -> bool {
     match response {
         Ok(_) => true,
         Err(e) => {
-            tracing::error!("Failed to send local notification: {}", e);
+            tracing::error!(error = ?e, "Failed to send local notification");
             false
         }
     }

@@ -4,8 +4,9 @@ use std::{io, process::ExitStatus, time::Duration};
 use std::os::unix::process::ExitStatusExt;
 
 pub struct Message {
-   pub title: String,
-    pub  body: String,
+    pub title: String,
+    pub body: String,
+    pub priority: i32,
 }
 
 impl Message {
@@ -13,16 +14,19 @@ impl Message {
         Self {
             title: "Notification".to_string(),
             body: text.to_string(),
+            priority: 3,
         }
     }
-    
+
     pub fn from_status(status: &io::Result<ExitStatus>, cmd: &str, elapsed: Duration) -> Self {
         let took = fmt_duration(elapsed);
+        let cmd = cmd.trim();
 
-        let (title, body) = match status {
+        let (title, body, priority) = match status {
             Ok(s) if s.success() => (
                 "Command finished".to_string(),
                 format!("`{cmd}` succeeded after {took}."),
+                3,
             ),
             Ok(s) => match s.code() {
                 Some(code) => {
@@ -32,17 +36,26 @@ impl Message {
                     (
                         "Command failed".to_string(),
                         format!("`{cmd}` exited with code {code}{hint} after {took}."),
+                        4,
                     )
                 }
-                None => describe_signal(s, cmd, &took),
+                None => {
+                    let (title, body, priority) = describe_signal(s, cmd, &took);
+                    (title, body, priority)
+                }
             },
             Err(e) => (
                 "Command could not start".to_string(),
                 format!("`{cmd}` failed to launch: {e}"),
+                5,
             ),
         };
 
-        Self { title, body }
+        Self {
+            title,
+            body,
+            priority,
+        }
     }
 
     pub fn text(&self) -> String {
@@ -86,7 +99,7 @@ fn html_escape(s: &str) -> String {
         .replace('<', "&lt;")
         .replace('>', "&gt;")
 }
-fn describe_signal(status: &ExitStatus, cmd: &str, took: &str) -> (String, String) {
+fn describe_signal(status: &ExitStatus, cmd: &str, took: &str) -> (String, String, i32) {
     #[cfg(unix)]
     if let Some(sig) = status.signal() {
         let core = if status.core_dumped() {
@@ -100,6 +113,7 @@ fn describe_signal(status: &ExitStatus, cmd: &str, took: &str) -> (String, Strin
                 "`{cmd}` was terminated by {} (signal {sig}{core}) after {took}.",
                 signal_name(sig)
             ),
+            3,
         );
     }
     #[cfg(not(unix))]
@@ -107,6 +121,7 @@ fn describe_signal(status: &ExitStatus, cmd: &str, took: &str) -> (String, Strin
     (
         "Command terminated".to_string(),
         format!("`{cmd}` was terminated abnormally after {took}."),
+        3,
     )
 }
 

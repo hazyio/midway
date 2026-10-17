@@ -15,9 +15,8 @@ pub fn send_telegram_notification(message: &Message, info: &TelegramToken) -> bo
     match response {
         Ok(_) => true,
         Err(e) => {
-            tracing::error!("Failed to send Telegram notification: {}", e);
+            tracing::error!(error = ?e, "Failed to send Telegram notification");
             false
         }
     }
 }
-    

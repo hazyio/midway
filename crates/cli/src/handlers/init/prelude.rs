@@ -2,11 +2,11 @@ use std::process::exit;
 
 use config::{
     app_config::AppConfig,
-    token_config::{NtfyConfig, TelegramToken},
+    token_config::{EmailSmtpConfig, NtfyConfig, TelegramToken},
     verifier,
 };
 
-use crate::handlers::prompt::{prompt_optional, prompt_yes_no, warning_theme};
+use crate::handlers::prompt::{prompt_optional, prompt_password, prompt_yes_no, warning_theme};
 
 fn has_config() -> bool {
     let config_exists = std::path::Path::new("midway.yaml").exists();
@@ -43,6 +43,10 @@ pub fn init() {
     let ntfy = collect_ntfy();
     if let Some(ntfy) = ntfy {
         app.tokens.ntfy = Some(ntfy);
+    }
+    let email_smtp = collect_email_smtp();
+    if let Some(email_smtp) = email_smtp {
+        app.tokens.email_smtp = Some(email_smtp);
     }
     app.save_to(std::path::Path::new("midway.yaml"))
         .expect("Failed to save config");
@@ -121,4 +125,60 @@ fn collect_ntfy() -> Option<NtfyConfig> {
         }
         None => None,
     }
+}
+
+fn collect_email_smtp() -> Option<EmailSmtpConfig> {
+    let smtp_server = prompt_optional(
+        "What is your SMTP server hostname or IP address?",
+        None,
+        Some(|s: &String| {
+            if s.is_empty() {
+                Ok(())
+            } else {
+                verifier::smtp_server(s)
+            }
+        }),
+        None,
+    )?;
+    let smtp_port = prompt_optional(
+        "What is your SMTP port?",
+        None,
+        Some(|s: &String| {
+            let port = s
+                .parse::<u16>()
+                .map_err(|_| "Enter a valid SMTP port.".to_owned())?;
+            verifier::smtp_port(port)
+        }),
+        Some("587".to_owned()),
+    )?;
+    let username = prompt_optional(
+        "What is your SMTP username?",
+        None,
+        Some(|s: &String| verifier::smtp_username(s)),
+        None,
+    )?;
+    let password = prompt_password("What is your SMTP password?", |s: &String| {
+        verifier::smtp_password(s)
+    })?;
+    let from_email = prompt_optional(
+        "What email address should Midway send from?",
+        None,
+        Some(|s: &String| verifier::email_address(s)),
+        None,
+    )?;
+    let to_email = prompt_optional(
+        "What email address should receive notifications?",
+        None,
+        Some(|s: &String| verifier::email_address(s)),
+        None,
+    )?;
+
+    Some(EmailSmtpConfig {
+        smtp_server,
+        smtp_port: smtp_port.parse::<u16>().ok()?,
+        username,
+        password,
+        from_email,
+        to_email,
+    })
 }

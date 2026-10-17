@@ -1,7 +1,7 @@
 use std::{default, path::Path};
 
 use console::Style;
-use dialoguer::{Confirm, Input, theme::ColorfulTheme};
+use dialoguer::{Confirm, Input, Password, theme::ColorfulTheme};
 
 pub struct Prompt {
     user: String,
@@ -66,6 +66,20 @@ pub fn prompt_optional(
     let s = input.interact_text().unwrap();
     let s = s.trim().to_owned();
     (!s.is_empty()).then_some(s)
+}
+
+pub fn prompt_password(
+    prompt: &str,
+    validate_with: impl Fn(&String) -> Result<(), String>,
+) -> Option<String> {
+    let theme = ColorfulTheme::default();
+    let password = Password::with_theme(&theme)
+        .with_prompt(prompt)
+        .allow_empty_password(true)
+        .validate_with(validate_with)
+        .interact()
+        .unwrap();
+    (!password.is_empty()).then_some(password)
 }
 
 pub(super) fn prompt_yes_no(prompt: &str, theme: Option<ColorfulTheme>) -> bool {
