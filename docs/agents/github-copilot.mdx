@@ -12,16 +12,16 @@ Create a JSON hook file under `.github/hooks/`, for example `.github/hooks/midwa
     "notification": [
       {
         "type": "command",
-        "bash": "midway send-text -m 'Copilot needs attention'",
-        "powershell": "midway send-text -m 'Copilot needs attention'",
+        "bash": "midway send-text --background -m 'Copilot needs attention'",
+        "powershell": "midway send-text --background -m 'Copilot needs attention'",
         "matcher": "agent_completed|agent_idle|permission_prompt|elicitation_dialog"
       }
     ],
     "sessionEnd": [
       {
         "type": "command",
-        "bash": "midway send-text -m 'Copilot session ended'",
-        "powershell": "midway send-text -m 'Copilot session ended'"
+        "bash": "midway send-text --background -m 'Copilot session ended'",
+        "powershell": "midway send-text --background -m 'Copilot session ended'"
       }
     ]
   }
@@ -30,6 +30,6 @@ Create a JSON hook file under `.github/hooks/`, for example `.github/hooks/midwa
 
 The `notification` event is available in Copilot CLI, but not Copilot cloud agent. It fires asynchronously for matching system notifications, such as when an agent completes or needs approval. `sessionEnd` runs when a session terminates; in Copilot cloud agent, it runs once per job.
 
-Copilot CLI runs hooks on your machine. Copilot cloud agent runs hooks inside a temporary Linux environment, not on your desktop. To use `sessionEnd` there, Midway and its configuration must be made available in that environment. Do not commit notification credentials to the repository; cloud-agent outbound network access may also require an administrator allow rule.
+Copilot CLI runs hooks on your machine. Copilot cloud agent runs hooks inside a temporary Linux environment, not on your desktop. To use `sessionEnd` there, Midway and its configuration must be made available in that environment. Background sends survive hook cancellation, but the cloud-agent environment can be torn down before a detached send completes. Do not commit notification credentials to the repository; cloud-agent outbound network access may also require an administrator allow rule.
 
 For VS Code, the selected agent harness determines which hook implementation is active. Copilot harness sessions use the Copilot SDK hooks; see the [VS Code hooks guide](https://code.visualstudio.com/docs/copilot/customization/hooks) and verify event availability for your VS Code version.

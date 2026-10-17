@@ -11,6 +11,18 @@ midway send-text --message "Deployment finished"
 
 The `--message` option is required. Midway sends the text immediately through the notification methods selected by `notification.send_to` and `pick_from`; it does not apply the command-duration threshold used by `midway run`.
 
+## Send in the background
+
+Add `--background` (or `-b`) to start the send as a detached process:
+
+```bash
+midway send-text --background --message "Deployment finished"
+```
+
+Midway returns after starting the send. Pressing Ctrl+C or terminating the shell or hook that launched it will not stop the detached send. A system shutdown, explicit termination of the Midway process, or teardown of its execution environment can still interrupt it.
+
+Background sends use `midway.yaml` from the current working directory. Make sure that file is available where the detached process starts.
+
 Midway reads `midway.yaml` from the current working directory. Select another config file with `--config`:
 
 ```bash

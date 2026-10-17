@@ -9,10 +9,10 @@ OpenCode uses plugins for lifecycle events. Save this plugin as `.opencode/plugi
 export const MidwayNotifications = async ({ $ }) => ({
   event: async ({ event }) => {
     if (event.type === "session.idle") {
-      await $`midway send-text -m "OpenCode finished"`;
+      await $`midway send-text --background -m "OpenCode finished"`;
     }
     if (event.type === "permission.asked") {
-      await $`midway send-text -m "OpenCode needs approval"`;
+      await $`midway send-text --background -m "OpenCode needs approval"`;
     }
   },
 });

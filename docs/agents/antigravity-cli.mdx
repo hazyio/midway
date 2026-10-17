@@ -24,7 +24,7 @@ Create `.agents/hooks/midway-stop.sh`:
 
 ```sh
 #!/bin/sh
-midway send-text -m "Antigravity CLI finished" || true
+midway send-text --background -m "Antigravity CLI finished" || true
 printf '{"decision":"allow"}\n'
 ```
 

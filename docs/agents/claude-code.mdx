@@ -13,7 +13,7 @@ Add these hooks to `.claude/settings.json` for a project or `~/.claude/settings.
         "hooks": [
           {
             "type": "command",
-            "command": "midway send-text -m \"Claude Code finished\""
+            "command": "midway send-text --background -m \"Claude Code finished\""
           }
         ]
       }
@@ -24,7 +24,7 @@ Add these hooks to `.claude/settings.json` for a project or `~/.claude/settings.
         "hooks": [
           {
             "type": "command",
-            "command": "midway send-text -m \"Claude Code needs input\""
+            "command": "midway send-text --background -m \"Claude Code needs input\""
           }
         ]
       }

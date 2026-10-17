@@ -23,7 +23,7 @@ Add hooks to `.gemini/settings.json`. `AfterAgent` notifies after a response; `N
           {
             "name": "midway-agent-finished",
             "type": "command",
-            "command": "midway send-text -m \"Gemini CLI finished\""
+            "command": "midway send-text --background -m \"Gemini CLI finished\""
           }
         ]
       }
@@ -35,7 +35,7 @@ Add hooks to `.gemini/settings.json`. `AfterAgent` notifies after a response; `N
           {
             "name": "midway-agent-notification",
             "type": "command",
-            "command": "midway send-text -m \"Gemini CLI needs attention\""
+            "command": "midway send-text --background -m \"Gemini CLI needs attention\""
           }
         ]
       }
